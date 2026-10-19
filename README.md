@@ -5,7 +5,9 @@ Web app to configure the
 preview them in 3D and download STLs. OpenSCAD runs in the browser via
 WebAssembly.
 
-Work in progress. See [PLAN.md](PLAN.md) for the plan.
+Pick a row, drag the sliders, choose a legend font from Google Fonts, and
+download the STL of a single key or the whole Sofle set. See
+[PLAN.md](PLAN.md) for what is done and what is next.
 
 ## Development
 
