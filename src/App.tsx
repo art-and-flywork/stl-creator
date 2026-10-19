@@ -2,33 +2,33 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Choice, Section, Slider, Toggle } from './components/Field'
 import { FontPicker } from './components/FontPicker'
 import { ProfileStrip } from './components/ProfileStrip'
+import { LegendGrid } from './components/LegendGrid'
+import { SheetDialog } from './components/SheetDialog'
 import { Viewer } from './components/Viewer'
 import { Info } from './Info'
 import { loadFont, loadFontChoice, saveFontChoice, type FontChoice, type LoadedFont } from './fonts'
 import {
   DEFAULTS,
   loadParams,
-  loadQuality,
   modelFile,
   RANGES,
   saveParams,
-  saveQuality,
   toDefines,
   type Bump,
   type Half,
   type Mode,
   type Params,
-  type Quality,
   type RowKey,
 } from './scad/params'
 import { Renderer, Superseded } from './scad/renderer'
+import { layoutKeys, setLegend, type LayoutKey } from './scad/sofle'
 import './App.css'
 
 const ROWS = [0, 1, 2, 3, 4].map((r) => ({ value: r, label: r === 4 ? 'Thumb' : `Row ${r}` }))
 
 type Status =
   | { kind: 'idle' }
-  | { kind: 'rendering' }
+  | { kind: 'rendering'; label: string; expectedMs: number; run: number; big: boolean }
   | { kind: 'done'; ms: number; triangles: number; warnings: string[] }
   | { kind: 'error'; message: string; logs: string[] }
 
@@ -44,15 +44,23 @@ export default function App() {
   const [setRow, setSetRow] = useState(2)
   const [fontChoice, setFontChoice] = useState<FontChoice>(loadFontChoice)
   const [fontResult, setFontResult] = useState<{ key: string; font: LoadedFont | null } | null>(null)
-  const [quality, setQuality] = useState<Quality>(loadQuality)
-  const [model, setModel] = useState<{ stl: ArrayBuffer; mode: Mode; view: string; quality: Quality } | null>(null)
+  const [model, setModel] = useState<{
+    stl: ArrayBuffer
+    mode: Mode
+    view: string
+    /** Layout keys of a rendered set, for click-to-edit. */
+    keys: LayoutKey[]
+  } | null>(null)
+  const [selection, setSelection] = useState<{ id: string; from: 'view' | 'panel' } | null>(null)
+  const selectedKey = selection?.id ?? null
   const stl = model?.stl ?? null
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
-  const [exporting, setExporting] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
+  const [legendsOpen, setLegendsOpen] = useState(false)
   const renderer = useRef<Renderer | null>(null)
-  // separate worker, so preview renders never cancel a download
-  const exporter = useRef<Renderer | null>(null)
+  // last render time per view, so the loader can estimate how long it takes
+  const renderTimes = useRef<Record<string, number>>({ key: 800, 'set-both': 6000, 'set-left': 3500, 'set-right': 3500 })
+  const renderRun = useRef(0)
 
   const set = <K extends keyof Params>(key: K, value: Params[K]) =>
     setParams((p) => ({ ...p, [key]: value }))
@@ -62,7 +70,6 @@ export default function App() {
   useEffect(() => saveParams(params), [params])
   useEffect(() => saveFontChoice(fontChoice), [fontChoice])
   useEffect(() => localStorage.setItem('keycap-stl:mode', mode), [mode])
-  useEffect(() => saveQuality(quality), [quality])
 
   const fontKey = `${fontChoice.id}-${fontChoice.weight}-${fontChoice.italic}`
   const fontStatus = fontResult?.key !== fontKey ? 'loading' : fontResult.font ? 'ready' : 'error'
@@ -84,16 +91,29 @@ export default function App() {
     if (fontStatus === 'loading') return
     renderer.current ??= new Renderer()
     const timer = setTimeout(() => {
-      setStatus({ kind: 'rendering' })
+      const view = mode === 'set' ? `set-${params.half}` : 'key'
+      setStatus({
+        kind: 'rendering',
+        label: mode === 'set' ? `Rendering ${layoutKeys(params).length} keys` : 'Rendering the key',
+        expectedMs: renderTimes.current[view] ?? 3000,
+        run: ++renderRun.current,
+        big: mode === 'set',
+      })
       renderer
         .current!.render({
           file: modelFile(mode),
-          defines: toDefines(params, mode, font?.scadName, quality),
+          defines: toDefines(params, mode, font?.scadName),
           font: font?.bytes,
         })
         .then(
           (result) => {
-            setModel({ stl: result.stl, mode, quality, view: mode === 'set' ? `set-${params.half}` : 'key' })
+            renderTimes.current[view] = result.ms
+            setModel({
+              stl: result.stl,
+              mode,
+              view,
+              keys: mode === 'set' ? layoutKeys(params) : [],
+            })
             const warnings = result.logs.filter((l) => /^WARNING/.test(l))
             if (!font) warnings.unshift('No legend font loaded, so legends are left out.')
             setStatus({
@@ -110,35 +130,16 @@ export default function App() {
         )
     }, 180)
     return () => clearTimeout(timer)
-  }, [params, mode, font, fontStatus, quality])
+  }, [params, mode, font, fontStatus])
 
-  const save = (data: ArrayBuffer, name: string) => {
-    const url = URL.createObjectURL(new Blob([data], { type: 'model/stl' }))
-    Object.assign(document.createElement('a'), { href: url, download: name }).click()
+  const download = () => {
+    if (!model) return
+    const url = URL.createObjectURL(new Blob([model.stl], { type: 'model/stl' }))
+    Object.assign(document.createElement('a'), { href: url, download: fileName(params, model.mode) }).click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
-  // downloads are always full quality; a fast preview gets re-rendered first
-  const download = async () => {
-    if (!model) return
-    const name = fileName(params, model.mode)
-    if (model.quality === 'fine') return save(model.stl, name)
-    exporter.current ??= new Renderer()
-    setExporting(true)
-    try {
-      const result = await exporter.current.render({
-        file: modelFile(model.mode),
-        defines: toDefines(params, model.mode, font?.scadName, 'fine'),
-        font: font?.bytes,
-      })
-      save(result.stl, name)
-    } catch (error) {
-      setStatus({ kind: 'error', message: (error as Error).message, logs: [] })
-    } finally {
-      setExporting(false)
-    }
-  }
-
+  const legendFont = font ? `"${font.cssFamily}", monospace` : undefined
   const editRow = mode === 'key' ? params.row : setRow
   const homeKeys = useMemo(() => params.home_keys.join(', '), [params.home_keys])
   const busy = status.kind === 'rendering'
@@ -208,7 +209,18 @@ export default function App() {
               />
               <Slider label="Thumb key length" value={params.thumb_length} range={RANGES.thumb_length} onChange={(v) => set('thumb_length', v)} />
               <Slider label="Thumb key tilt" value={params.thumb_roll} range={RANGES.thumb_roll} hint="outwards" onChange={(v) => set('thumb_roll', v)} />
-              <p className="note">The full set takes a few seconds to render. Legends come from the Sofle layout file.</p>
+              <div className="field">
+                <span className="label">Legends</span>
+                <button type="button" className="legend-preview" onClick={() => setLegendsOpen(true)}>
+                  <LegendGrid params={params} variant="preview" fontFamily={legendFont} />
+                </button>
+                <div className="legend-actions">
+                  <button type="button" className="secondary" onClick={() => setLegendsOpen(true)}>
+                    Edit legends
+                  </button>
+                  <span className="note">or click a key in the 3D view</span>
+                </div>
+              </div>
             </Section>
           )}
 
@@ -283,32 +295,66 @@ export default function App() {
       </aside>
 
       <main className="stage">
-        <Viewer stl={stl} frameKey={model?.view ?? mode} quality={quality} />
-        <div className="quality">
-          <Choice<Quality>
-            label="Preview quality"
-            value={quality}
-            options={[
-              { value: 'fast', label: 'Fast rendering' },
-              { value: 'fine', label: 'High quality rendering' },
-            ]}
-            onChange={setQuality}
-          />
-        </div>
+        <Viewer
+          stl={stl}
+          frameKey={model?.view ?? mode}
+          editing={
+            mode === 'set' && model?.mode === 'set'
+              ? {
+                  keys: model.keys,
+                  selected: selectedKey,
+                  inputOpen: selection?.from === 'view',
+                  onSelect: (id) => setSelection(id ? { id, from: 'view' } : null),
+                  onLegend: (id, legend) => setParams((p) => setLegend(p, id, legend)),
+                  fontFamily: legendFont,
+                }
+              : undefined
+          }
+        />
         <StatusLine status={status} hasModel={stl !== null} />
-        <button type="button" className="download" onClick={download} disabled={!stl || busy || exporting}>
-          {exporting ? 'Preparing full-quality STL…' : `Download ${fileName(params, model?.mode ?? mode)}`}
+        <button type="button" className="download" onClick={download} disabled={!stl || busy}>
+          Download {fileName(params, model?.mode ?? mode)}
         </button>
       </main>
       <Info open={infoOpen} onClose={() => setInfoOpen(false)} />
+      <SheetDialog open={legendsOpen} onClose={() => setLegendsOpen(false)} title="Legends" size="medium">
+        <div className="legend-editor">
+          <p className="note">
+            Type the legend for each key; leave a box empty for a blank keycap. Homing bumps go on{' '}
+            {params.home_keys.join(' and ') || 'no keys'}, set under Homing bumps.
+          </p>
+          <LegendGrid
+            params={params}
+            variant="edit"
+            selected={selectedKey}
+            fontFamily={legendFont}
+            onSelect={(id) => setSelection(id ? { id, from: 'panel' } : null)}
+            onLegend={(id, legend) => setParams((p) => setLegend(p, id, legend))}
+          />
+          <button
+            type="button"
+            className="link"
+            onClick={() => setParams((p) => ({ ...p, left: DEFAULTS.left, right: DEFAULTS.right }))}
+          >
+            Reset to the default legends
+          </button>
+        </div>
+      </SheetDialog>
     </div>
   )
 }
 
 function StatusLine({ status, hasModel }: { status: Status; hasModel: boolean }) {
-  if (status.kind === 'idle' || (status.kind === 'rendering' && !hasModel))
-    return <div className="status">Loading OpenSCAD…</div>
-  if (status.kind === 'rendering') return <div className="status busy">Rendering…</div>
+  if (status.kind === 'idle') return <Loader label="Loading OpenSCAD" expectedMs={2000} big />
+  if (status.kind === 'rendering')
+    return (
+      <Loader
+        key={status.run}
+        label={hasModel ? status.label : 'Loading OpenSCAD'}
+        expectedMs={status.expectedMs + (hasModel ? 0 : 1500)}
+        big={status.big || !hasModel}
+      />
+    )
   if (status.kind === 'error')
     return (
       <div className="status error" role="alert">
@@ -324,6 +370,21 @@ function StatusLine({ status, hasModel }: { status: Status; hasModel: boolean })
           {w}
         </div>
       ))}
+    </div>
+  )
+}
+
+/**
+ * OpenSCAD reports no progress, so the bar fills over the time the previous
+ * render of this view took and slows down near the end.
+ */
+function Loader({ label, expectedMs, big }: { label: string; expectedMs: number; big: boolean }) {
+  return (
+    <div className={big ? 'loader big' : 'loader'} role="status">
+      <span>{label}…</span>
+      <div className="ruler" aria-hidden="true">
+        <div className="fill" style={{ animationDuration: `${Math.max(400, expectedMs)}ms` }} />
+      </div>
     </div>
   )
 }

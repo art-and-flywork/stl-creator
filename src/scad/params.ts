@@ -27,6 +27,8 @@ export interface Params {
   stem_tine_width: number
   stem_tine_height: number
   // layouts/sofle.scad
+  left: string[][]
+  right: string[][]
   thumb_length: number
   thumb_roll: number
   half: Half
@@ -36,7 +38,7 @@ export const ROW_KEYS = ['heights', 'tilts', 'skews', 'fontSizes'] as const
 export type RowKey = (typeof ROW_KEYS)[number]
 
 const KEY_ONLY = ['legend_text', 'row', 'length', 'roll', 'bump'] as const
-const SET_ONLY = ['thumb_length', 'thumb_roll', 'half'] as const
+const SET_ONLY = ['left', 'right', 'thumb_length', 'thumb_roll', 'half'] as const
 
 /** Defaults read from the .scad files themselves. */
 export const DEFAULTS = {
@@ -83,38 +85,20 @@ export function modelFile(mode: Mode): string {
   return mode === 'key' ? 'key.scad' : 'layouts/sofle.scad'
 }
 
-export type Quality = 'fine' | 'fast'
-
-// KeyV2 draws arcs with $fs=0.1 and rounded corners with 30 facets. Coarser
-// values roughly halve the triangle count; only used for the preview.
-const FAST_DEFINES = ['$fs=0.4', '$shape_facets=12']
+// KeyV2 draws arcs with $fs=0.1 and rounded corners with 30 facets. These
+// coarser values halve the triangle count and render time, with no visible
+// difference at keycap size, so lighter machines keep up.
+const RESOLUTION_DEFINES = ['$fs=0.4', '$shape_facets=12']
 
 /** `-D name=value` overrides for every setting that applies to the mode. */
-export function toDefines(params: Params, mode: Mode, font?: string, quality: Quality = 'fine'): string[] {
+export function toDefines(params: Params, mode: Mode, font?: string): string[] {
   const skip = new Set<string>(mode === 'key' ? SET_ONLY : KEY_ONLY)
   const defines = Object.entries(params)
     .filter(([name]) => !skip.has(name))
     .map(([name, value]) => `${name}=${toScad(value)}`)
   if (font) defines.push(`$font=${toScad(font)}`)
-  if (quality === 'fast') defines.push(...FAST_DEFINES)
+  defines.push(...RESOLUTION_DEFINES)
   return defines
-}
-
-/** Fast preview unless the viewer picked high quality before. */
-export function loadQuality(): Quality {
-  try {
-    return localStorage.getItem('keycap-stl:quality') === 'fine' ? 'fine' : 'fast'
-  } catch {
-    return 'fast'
-  }
-}
-
-export function saveQuality(quality: Quality) {
-  try {
-    localStorage.setItem('keycap-stl:quality', quality)
-  } catch {
-    // storage unavailable
-  }
 }
 
 const STORAGE_KEY = 'keycap-stl:params'

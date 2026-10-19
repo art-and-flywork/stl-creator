@@ -1,104 +1,4 @@
-/* The info page is a drawing sheet laid over the configurator: mm grid paper,
-   a double frame and a title block, in the colours of the cutting mat. */
-
-.info-dialog {
-  width: min(1280px, calc(100vw - 48px));
-  height: calc(100vh - 48px);
-  max-width: none;
-  max-height: none;
-  margin: auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  overflow: visible;
-}
-
-.info-dialog::backdrop {
-  background: rgba(35, 70, 58, 0.82);
-  backdrop-filter: blur(3px);
-}
-
-.info-dialog[open] {
-  animation: sheet-in 160ms ease-out;
-}
-
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-.sheet {
-  --grid-fine: rgba(47, 91, 76, 0.07);
-  --grid-coarse: rgba(47, 91, 76, 0.14);
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
-  border: 1.5px solid var(--ink);
-  outline: 1px solid var(--ink);
-  outline-offset: 5px;
-  background-color: var(--paper);
-  /* 1 mm and 10 mm grid, at 4 px per mm */
-  background-image:
-    linear-gradient(var(--grid-coarse) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-coarse) 1px, transparent 1px),
-    linear-gradient(var(--grid-fine) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px);
-  background-size:
-    40px 40px,
-    40px 40px,
-    4px 4px,
-    4px 4px;
-  box-shadow:
-    0 0 0 6px var(--paper),
-    0 24px 60px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-}
-
-.sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px 28px;
-  border-bottom: 1.5px solid var(--ink);
-  background: var(--paper);
-}
-
-.sheet-head h1 {
-  margin: 0;
-  font-size: 26px;
-  font-weight: 650;
-  letter-spacing: -0.015em;
-}
-
-.close {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 1px solid var(--ink);
-  border-radius: 0;
-  background: var(--paper);
-  cursor: pointer;
-}
-
-.close:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.close svg {
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
+/* Contents of the info sheet; the sheet itself is in components/SheetDialog.css. */
 
 .sheet-body {
   display: grid;
@@ -351,23 +251,6 @@
 }
 
 @media (max-width: 760px) {
-  .info-dialog {
-    width: calc(100vw - 20px);
-    height: calc(100vh - 20px);
-  }
-
-  .sheet {
-    outline-offset: 3px;
-  }
-
-  .sheet-head {
-    padding: 12px 16px;
-  }
-
-  .sheet-head h1 {
-    font-size: 20px;
-  }
-
   .sheet-body {
     grid-template-columns: 1fr;
   }
@@ -387,11 +270,5 @@
 
   .title-block dl > div {
     padding: 4px 10px 6px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .info-dialog[open] {
-    animation: none;
   }
 }

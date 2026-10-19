@@ -389,15 +389,74 @@
   pointer-events: none;
 }
 
-.status.busy::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 50%;
+.loader {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  gap: 6px;
+  width: 200px;
+  padding: 8px 12px 10px;
+  border-radius: 6px;
+  background: rgba(20, 40, 33, 0.72);
+  color: #e6efe9;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+/* long renders: a card in the middle of the mat, drawn like the info sheet */
+.loader.big {
+  top: 50%;
+  left: 50%;
+  width: min(320px, calc(100% - 32px));
+  padding: 14px 18px 16px;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
+  background: var(--paper);
+  box-shadow: 0 0 0 5px var(--paper), 0 16px 40px rgba(0, 0, 0, 0.3);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* a ruler with 1 mm and 5 mm ticks; the fill runs along it */
+.ruler {
+  position: relative;
+  height: 10px;
+  border-bottom: 1px solid currentColor;
+  background:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 20px) bottom / 100% 8px no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 4px) bottom / 100% 4px no-repeat;
+  opacity: 0.9;
+}
+
+.ruler .fill {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 4px;
+  width: 0;
   background: var(--focus);
-  animation: pulse 0.9s ease-in-out infinite alternate;
+  animation: fill 1s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+}
+
+.loader.big .ruler .fill {
+  background: var(--mat);
+}
+
+@keyframes fill {
+  to {
+    width: 92%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruler .fill {
+    animation: none;
+    width: 50%;
+  }
 }
 
 .status.error {
@@ -417,50 +476,6 @@
   color: #f3d58b;
 }
 
-@keyframes pulse {
-  from {
-    opacity: 0.35;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.quality {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-}
-
-.quality .field {
-  grid-auto-flow: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.quality .label {
-  display: none;
-}
-
-.quality .segments {
-  background: rgba(20, 40, 33, 0.72);
-}
-
-.quality .segments button {
-  min-height: 26px;
-  color: #e6efe9;
-  font-size: 13px;
-}
-
-.quality .segments button:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.quality .segments button.active {
-  background: var(--plastic);
-  color: var(--ink);
-  box-shadow: none;
-}
 
 /* the download button is a keycap sitting on the mat */
 .download {
@@ -517,4 +532,157 @@
     right: 12px;
     bottom: 12px;
   }
+}
+
+/* ---------- legend editing ---------- */
+
+.legend-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.legend-half {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+/* sidebar preview: tiny caps, the whole thing is one button */
+.legend-preview {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.legend-preview:hover {
+  border-color: var(--mat);
+}
+
+.legend-grid.preview {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.legend-grid.preview .legend-half {
+  grid-auto-rows: 13px;
+  gap: 2px;
+}
+
+.legend-grid.preview span {
+  overflow: hidden;
+  border: 1px solid #d8d0bf;
+  border-bottom-width: 2px;
+  border-radius: 2px;
+  background: var(--plastic);
+  font-size: 6px;
+  line-height: 9px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.legend-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.secondary {
+  padding: 6px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* editor popup: two halves side by side, keycap-sized boxes */
+.legend-editor {
+  display: grid;
+  gap: 18px;
+  padding: 24px 28px 28px;
+  overflow-y: auto;
+}
+
+.legend-grid.edit {
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.legend-grid.edit .legend-half {
+  grid-auto-rows: 44px;
+  gap: 5px;
+}
+
+.legend-grid.edit input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 2px;
+  border: 1px solid #d8d0bf;
+  border-bottom-width: 4px;
+  border-radius: 5px;
+  background: var(--plastic);
+  font-size: 15px;
+  text-align: center;
+}
+
+.legend-grid.edit input:focus,
+.legend-grid.edit input.selected {
+  border-color: var(--focus);
+  outline: none;
+  background: #fff;
+}
+
+@media (max-width: 760px) {
+  .legend-grid.edit {
+    grid-template-columns: 1fr;
+  }
+
+  .legend-editor {
+    padding: 16px;
+  }
+}
+
+.legend-callout {
+  pointer-events: auto;
+}
+
+.legend-callout label {
+  display: grid;
+  gap: 4px;
+  width: 170px;
+  padding: 7px 9px 9px;
+  transform: translateX(-50%);
+  border: 1px solid #d8d0bf;
+  border-top: 3px solid var(--focus);
+  border-radius: 6px;
+  background: var(--plastic);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.legend-callout input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  border: 1px solid #d8d0bf;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 22px;
+  text-align: center;
+}
+
+.legend-callout small {
+  color: var(--muted);
+  font-size: 11px;
 }
