@@ -109,7 +109,10 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
 
 ### 4. Polish
 - [x] Settings in localStorage.
-- [ ] Settings in the URL (shareable link).
+- [x] Settings in the URL (shareable link): "Share this set" copies a
+      `#set=` link with base64url JSON of the settings that differ from
+      the defaults, plus mode and font. Opening one shows a notice with a
+      way back to your own settings.
 - [ ] Presets: "original DCS", "this profile".
 - [ ] Cache STLs by parameter hash so switching back is instant.
 - [x] Side-view diagram of the rows (like `images/profile-side.png`).

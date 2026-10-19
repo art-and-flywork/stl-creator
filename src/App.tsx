@@ -22,7 +22,17 @@ import {
 } from './scad/params'
 import { Renderer, Superseded } from './scad/renderer'
 import { layoutKeys, setLegend, type LayoutKey } from './scad/sofle'
+import { clearSharedSet, readSharedSet, shareUrl } from './share'
 import './App.css'
+
+// A shared link replaces the stored settings; keep those for the undo button.
+const storedSettings = () => ({
+  params: loadParams(),
+  mode: (localStorage.getItem('keycap-stl:mode') as Mode) || 'key',
+  font: loadFontChoice(),
+})
+const shared = readSharedSet()
+const stored = storedSettings()
 
 const ROWS = [0, 1, 2, 3, 4].map((r) => ({ value: r, label: r === 4 ? 'Thumb' : `Row ${r}` }))
 
@@ -39,10 +49,30 @@ function fileName(params: Params, mode: Mode) {
 }
 
 export default function App() {
-  const [params, setParams] = useState<Params>(loadParams)
-  const [mode, setMode] = useState<Mode>(() => (localStorage.getItem('keycap-stl:mode') as Mode) || 'key')
+  const [params, setParams] = useState<Params>(shared?.params ?? stored.params)
+  const [mode, setMode] = useState<Mode>(shared?.mode ?? stored.mode)
   const [setRow, setSetRow] = useState(2)
-  const [fontChoice, setFontChoice] = useState<FontChoice>(loadFontChoice)
+  const [fontChoice, setFontChoice] = useState<FontChoice>(shared?.font ?? stored.font)
+  const [sharedNotice, setSharedNotice] = useState(shared !== null)
+  const undoTo = useRef(stored)
+  const [shareState, setShareState] = useState<'idle' | 'copied' | 'failed'>('idle')
+
+  useEffect(() => {
+    if (shared) clearSharedSet()
+    // a shared link pasted into a tab that already has the app open
+    const onHash = () => {
+      const set = readSharedSet()
+      if (!set) return
+      undoTo.current = storedSettings()
+      setParams(set.params)
+      setMode(set.mode)
+      setFontChoice(set.font)
+      setSharedNotice(true)
+      clearSharedSet()
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
   const [fontResult, setFontResult] = useState<{ key: string; font: LoadedFont | null } | null>(null)
   const [model, setModel] = useState<{
     stl: ArrayBuffer
@@ -131,6 +161,34 @@ export default function App() {
     }, 180)
     return () => clearTimeout(timer)
   }, [params, mode, font, fontStatus])
+
+  const share = async () => {
+    const url = shareUrl({ mode, params, font: fontChoice })
+    // the share sheet on phones and tablets, the clipboard elsewhere
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+      try {
+        await navigator.share({ title: 'Keycap set', url })
+      } catch {
+        // cancelled
+      }
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setShareState('copied')
+    } catch {
+      setShareState('failed')
+      window.prompt('Copy this link:', url)
+    }
+    setTimeout(() => setShareState('idle'), 2000)
+  }
+
+  const undoShared = () => {
+    setParams(undoTo.current.params)
+    setMode(undoTo.current.mode)
+    setFontChoice(undoTo.current.font)
+    setSharedNotice(false)
+  }
 
   const download = () => {
     if (!model) return
@@ -312,9 +370,27 @@ export default function App() {
           }
         />
         <StatusLine status={status} hasModel={stl !== null} />
-        <button type="button" className="download" onClick={download} disabled={!stl || busy}>
-          Download {fileName(params, model?.mode ?? mode)}
-        </button>
+        {sharedNotice && (
+          <div className="shared-notice" role="status">
+            <span>You opened a shared keycap set. It replaced your own settings.</span>
+            <button type="button" className="secondary" onClick={undoShared}>
+              Back to my settings
+            </button>
+            <button type="button" className="close-small" aria-label="Dismiss" onClick={() => setSharedNotice(false)}>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 3l10 10M13 3L3 13" />
+              </svg>
+            </button>
+          </div>
+        )}
+        <div className="stage-actions">
+          <button type="button" className="keycap-button share" onClick={share} aria-live="polite">
+            {shareState === 'copied' ? 'Link copied' : shareState === 'failed' ? 'Copy the link' : 'Share this set'}
+          </button>
+          <button type="button" className="keycap-button download" onClick={download} disabled={!stl || busy}>
+            Download {fileName(params, model?.mode ?? mode)}
+          </button>
+        </div>
       </main>
       <Info open={infoOpen} onClose={() => setInfoOpen(false)} />
       <SheetDialog open={legendsOpen} onClose={() => setLegendsOpen(false)} title="Legends" size="medium">
