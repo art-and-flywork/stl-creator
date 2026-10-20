@@ -1,0 +1,48 @@
+:root {
+  --paper: #f6f7f4;
+  --ink: #1d2421;
+  --muted: #5f6b66;
+  --line: #d9ddd8;
+  --mat: #2f5b4c;
+  --mat-deep: #23463a;
+  --plastic: #f1ece1;
+  --danger: #a3341f;
+  --focus: #e0a526;
+
+  --sans: 'Instrument Sans', system-ui, sans-serif;
+  font: 15px/1.45 var(--sans);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--paper);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
