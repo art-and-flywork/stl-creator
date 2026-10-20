@@ -1,8 +1,8 @@
 import type { Params } from './params'
 
-// Mirrors the placement in keycaps/layouts/sofle.scad (sofle_half and the two
+// Mirrors the placement in models/keycaps/layouts/sofle.scad (sofle_half and the two
 // calls below it). Keep in sync when that file changes.
-const UNIT = 19.05 // $unit in keycaps/src/constants.scad
+const UNIT = 19.05 // $unit in models/keycaps/src/constants.scad
 const BASE = 18.16 // DCS bottom width and depth
 
 const HALVES = {

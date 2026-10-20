@@ -1,4 +1,4 @@
-# keycap-stl
+# Keycaps
 
 Web app to configure the
 [Sofle DCS-based keycaps](https://github.com/mcbrwr/sofle-optimized-DCS-keycaps),
@@ -11,14 +11,20 @@ download the STL of a single key or the whole Sofle set. See
 
 ## Development
 
-```bash
-git clone --recurse-submodules <this repo>
-npm install
-npm run dev
-```
-
-The keycap model lives in the `keycaps/` git submodule. To update it:
+From the root of the monorepo:
 
 ```bash
-git submodule update --remote keycaps
+pnpm install
+pnpm --filter keycaps dev
 ```
+
+The keycap model lives in the `models/keycaps` git submodule at the root of
+the monorepo. To update it, from the root:
+
+```bash
+git submodule update --remote models/keycaps
+```
+
+## License
+
+GPL-3.0, like OpenSCAD and the keycap model. See [LICENSE.md](LICENSE.md).

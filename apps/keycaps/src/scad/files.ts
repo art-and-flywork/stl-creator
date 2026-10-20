@@ -1,12 +1,12 @@
-// The keycap model, straight from the keycaps/ submodule. Vite inlines every
+// The keycap model, straight from the models/keycaps submodule. Vite inlines every
 // .scad file as a string, so the app never keeps its own copy of the model.
-const raw = import.meta.glob('../../keycaps/**/*.scad', {
+const raw = import.meta.glob('../../../../models/keycaps/**/*.scad', {
   query: '?raw',
   import: 'default',
   eager: true,
 }) as Record<string, string>
 
-/** Model files keyed by their path inside keycaps/, e.g. "key.scad". */
+/** Model files keyed by their path inside models/keycaps/, e.g. "key.scad". */
 export const modelFiles: Record<string, string> = Object.fromEntries(
   Object.entries(raw)
     .filter(([path]) => !path.includes('/keycaps/images/'))

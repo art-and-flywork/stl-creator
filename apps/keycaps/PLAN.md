@@ -1,4 +1,4 @@
-# Plan: keycap-stl web app
+# Plan: keycaps app
 
 A web app where you configure the custom DCS-based keycaps from
 [sofle-optimized-DCS-keycaps](https://github.com/mcbrwr/sofle-optimized-DCS-keycaps),
@@ -8,9 +8,12 @@ model keeps a single source of truth.
 
 ## Starting point
 
-- Vite + React + TypeScript scaffold (`npm run dev`, `npm run build`).
-- `keycaps/` is a git submodule of the keycap repo. The app uses those
-  `.scad` files as they are; it never keeps its own copy of the model.
+- Vite + React + TypeScript app in the stl-creator monorepo
+  (`pnpm --filter keycaps dev`, `pnpm --filter keycaps build`). It started
+  as its own repo, keycap-stl; its history is kept in this one.
+- `models/keycaps` (monorepo root) is a git submodule of the keycap repo.
+  The app uses those `.scad` files as they are; it never keeps its own copy
+  of the model.
 - Milestones 0 and 1 are done: single key and full set render in a Web
   Worker, with sliders, a Google Fonts legend picker, 3D preview and STL
   download.
@@ -21,13 +24,13 @@ model keeps a single source of truth.
 React UI (params form, key list, viewer)
    │  postMessage({ file, defines })
    ▼
-Web Worker ── OpenSCAD WASM ── virtual FS with keycaps/ + font
+Web Worker ── OpenSCAD WASM ── virtual FS with the model + font
    │  STL bytes
    ▼
 three.js viewer (react-three-fiber) · download button
 ```
 
-- **Model files:** `import.meta.glob('keycaps/**/*.scad', { query: '?raw' })`
+- **Model files:** `import.meta.glob('models/keycaps/**/*.scad', { query: '?raw' })`
   inlines them into the worker bundle (`src/scad/files.ts`); no build script.
   The worker writes them into the OpenSCAD virtual filesystem per render.
   UI defaults are parsed from the one-line assignments in the `.scad` files,
@@ -73,7 +76,7 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
 - [x] Choose the WASM build (see open decisions). Hard requirements: manifold
       backend and `text()` support.
 - [x] Render a cube in a Web Worker and show the STL byte size.
-- [x] Load the `keycaps/` files and render `key.scad`. Get legends working:
+- [x] Load the model files and render `key.scad`. Get legends working:
       a Google Font (default Noto Sans Mono) plus a minimal `fonts.conf` in
       the virtual FS. DejaVu Sans Mono is not on Google Fonts, so legends
       differ slightly from the native default.
@@ -118,8 +121,12 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
 - [x] Side-view diagram of the rows (like `images/profile-side.png`).
 
 ### 5. Deploy
-- [ ] GitHub Pages via GitHub Actions (checkout with submodules, build, deploy).
-- [ ] Workflow or Dependabot rule to bump the `keycaps` submodule.
+- [x] Deployed to Vercel (team artandflywork, project keycap-stl), so far
+      with `vercel deploy` from a local checkout.
+- [ ] Deploy from this monorepo on push: Vercel project with Root Directory
+      `apps/keycaps`, submodules on, `npx turbo-ignore` as Ignored Build
+      Step; domain keycaps-stl.artandflywork.com.
+- [ ] Workflow or Dependabot rule to bump the `models/keycaps` submodule.
 
 ## Open decisions
 

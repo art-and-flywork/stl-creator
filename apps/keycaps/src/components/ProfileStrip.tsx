@@ -18,7 +18,7 @@ const W = 18.16 // DCS base width in mm
 const GAP = 3
 const MAX_H = 18
 
-/** Outline of one row in side view, back on the left like keycaps/images/profile-side.png. */
+/** Outline of one row in side view, back on the left like models/keycaps/images/profile-side.png. */
 function outline(profile: Profile, r: number): string {
   const x = r * (W + GAP)
   const h = profile.heights[r]

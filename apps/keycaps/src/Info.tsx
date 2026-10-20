@@ -4,7 +4,7 @@ import { SheetDialog } from './components/SheetDialog'
 import { DEFAULTS } from './scad/params'
 import './Info.css'
 
-// Original DCS values, from the comments in keycaps/profile.scad
+// Original DCS values, from the comments in models/keycaps/profile.scad
 const DCS = {
   heights: [11.5, 8.5, 7.5, 6, 6],
   tilts: [-6, -1, 3, 7, 16],
