@@ -1,0 +1,22 @@
+{
+  "name": "@stl-creator/stl-kit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./worker": "./src/render/worker.ts",
+    "./fonts": "./src/fonts/index.ts",
+    "./styles/base.css": "./src/styles/base.css",
+    "./styles/app.css": "./src/styles/app.css"
+  },
+  "scripts": {
+    "lint": "oxlint",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "oxlint": "^1.89.0",
+    "typescript": "~7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
