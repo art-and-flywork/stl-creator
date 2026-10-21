@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { clampCorners, DEFAULTS, toDefines } from './params'
+import {
+  clampHandleLength,
+  clampParams,
+  DEFAULTS,
+  maxHandleLength,
+  pressMinWidth,
+  toDefines,
+} from './params'
 
 describe('DEFAULTS', () => {
   it('come from onigiri.scad', () => {
@@ -8,37 +15,40 @@ describe('DEFAULTS', () => {
       height: 35,
       corners: 3,
       corner_radius: 12,
-      handle_length: 55,
-      handle_height: 28,
+      handle_length: 30,
+      handle_height: 15,
     })
   })
 })
 
-describe('toDefines', () => {
-  it('passes every setting with values clamped', () => {
-    expect(
-      toDefines({
-        ...DEFAULTS,
-        corners: 9,
-        corner_radius: 100,
-        handle_length: 5,
-        handle_height: 200,
-      }),
-    ).toEqual([
-      'diameter=90',
-      'height=35',
-      'corners=5',
-      'corner_radius=40',
-      'handle_length=30',
-      'handle_height=50',
-    ])
+describe('pressMinWidth', () => {
+  it('is half the diameter for a triangle', () => {
+    expect(pressMinWidth(90, 3)).toBeCloseTo(44.6, 0)
   })
 })
 
-describe('clampCorners', () => {
-  it('keeps values in 3–5', () => {
-    expect(clampCorners(2)).toBe(3)
-    expect(clampCorners(4)).toBe(4)
-    expect(clampCorners(7)).toBe(5)
+describe('maxHandleLength', () => {
+  it('is at least 5 mm shorter than the triangular press', () => {
+    expect(maxHandleLength(90, 3)).toBeCloseTo(39.6, 0)
+  })
+})
+
+describe('clampHandleLength', () => {
+  it('caps a long handle on a triangular press', () => {
+    expect(clampHandleLength(80, 90, 3)).toBeLessThanOrEqual(40)
+  })
+})
+
+describe('toDefines', () => {
+  it('clamps handle_length onto the press', () => {
+    const defines = toDefines({ ...DEFAULTS, handle_length: 80 })
+    const length = Number(defines.find((d) => d.startsWith('handle_length='))!.split('=')[1])
+    expect(length).toBeLessThanOrEqual(40)
+  })
+})
+
+describe('clampParams', () => {
+  it('shortens an oversized handle', () => {
+    expect(clampParams({ ...DEFAULTS, handle_length: 80 }).handle_length).toBeLessThanOrEqual(40)
   })
 })

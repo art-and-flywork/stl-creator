@@ -6,8 +6,8 @@ diameter = 90; // rice cavity width (inner opening of the ring)
 height = 35; // ring / rice thickness
 corners = 3; // 3 = classic triangle, up to 5
 corner_radius = 12; // how soft the corners are (mm)
-handle_length = 55; // tip-to-tip length of the press handle (mm)
-handle_height = 28; // how tall the handle stands above the press plate (mm)
+handle_length = 30; // tip-to-tip length of the press handle (mm)
+handle_height = 15; // how tall the handle stands above the press plate (mm)
 
 wall = 3.5;
 clearance = 0.4; // press sits loose inside the ring
@@ -15,10 +15,9 @@ base_t = 2.5;
 lip_h = 4;
 plate_margin = 6; // base plate beyond the ring
 handle_width = 10; // thickness of the grip (Y)
-handle_side_in = 1.2; // how much the long sides curve in (mm)
 gap = 10; // space between parts on the plate
 
-$fn = 64;
+$fn = 32;
 
 assert(corners >= 3 && corners <= 5, "corners must be 3, 4 or 5");
 
@@ -26,8 +25,13 @@ assert(corners >= 3 && corners <= 5, "corners must be 3, 4 or 5");
 max_corner_r = diameter / 2 * cos(180 / corners) * 0.9;
 corner_r = min(max(corner_radius, 0.5), max_corner_r);
 
-handle_l = max(handle_length, handle_width + 4);
-handle_h = max(handle_height, 8);
+// Smallest width of the press (flat-to-flat). Safer than diameter: a triangle's
+// plate is much narrower than its circumdiameter, and corner rounding pulls
+// the tips in further.
+press_min_w = (diameter - 2 * clearance) * cos(180 / corners);
+handle_max = press_min_w - 5;
+handle_l = min(max(handle_length, handle_width + 4), max(handle_max, handle_width + 4));
+handle_h = max(handle_height, 4);
 
 // Rounded regular n-gon whose overall width is about `d`.
 module profile(d) {
@@ -36,19 +40,15 @@ module profile(d) {
       circle(d = d, $fn = corners);
 }
 
-// Grip in XY: long in X, rounded tips, long sides gently scooped in.
-module handle_2d() {
+// Straight capsule: rounded tips, flat top (never minkowski).
+module handle() {
   tip_r = handle_width / 2;
   half = max(handle_l / 2 - tip_r, 0.1);
-  scoop = handle_l; // large radius → shallow hollow along the sides
-  difference() {
+  linear_extrude(handle_h)
     hull() {
       translate([-half, 0]) circle(r = tip_r);
       translate([half, 0]) circle(r = tip_r);
     }
-    translate([0, tip_r + scoop - handle_side_in]) circle(r = scoop);
-    translate([0, -(tip_r + scoop - handle_side_in)]) circle(r = scoop);
-  }
 }
 
 module ring() {
@@ -73,8 +73,7 @@ module press() {
   linear_extrude(base_t)
     profile(inner);
   translate([0, 0, base_t])
-    linear_extrude(handle_h)
-      handle_2d();
+    handle();
 }
 
 // Footprint width of one part (ring / base plate is the widest).

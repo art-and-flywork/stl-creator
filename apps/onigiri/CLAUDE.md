@@ -6,6 +6,7 @@ form fields, shared CSS).
 
 - Model changes go in `models/onigiri/` as their own change; the app never
   patches or copies the `.scad` files.
+- Never use `minkowski()` in the model — it hangs the browser WASM render.
 - Pass all settings to OpenSCAD as `-D` overrides.
 - Native reference render: `../../scripts/smoke-render.sh ../../models/onigiri/onigiri.scad`
   (set `PIECES=3` — the mold is three separate parts on one plate).

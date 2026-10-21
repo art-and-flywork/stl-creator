@@ -14,6 +14,7 @@ polygon (3–5 corners), classic triangle by default.
 | `handle_height` | how tall the handle stands above the press (mm) |
 
 Wall thickness, press clearance and plate details are fixed in the model.
+Do not use `minkowski()` — it is too slow for in-browser OpenSCAD.
 
 ```bash
 openscad --backend=manifold -o onigiri.stl -D corners=4 -D diameter=100 onigiri.scad

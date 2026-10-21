@@ -12,7 +12,17 @@ import {
 } from '@stl-creator/stl-kit'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MODEL_FILE } from './scad/files'
-import { CORNER_OPTIONS, DEFAULTS, loadParams, RANGES, saveParams, toDefines, type Params } from './scad/params'
+import {
+  clampParams,
+  CORNER_OPTIONS,
+  DEFAULTS,
+  handleLengthRange,
+  loadParams,
+  RANGES,
+  saveParams,
+  toDefines,
+  type Params,
+} from './scad/params'
 import { Info } from './Info'
 import { clearSharedOnigiri, readSharedOnigiri, shareUrl } from './share'
 import './App.css'
@@ -52,8 +62,10 @@ export default function App() {
     label: 'Shaping the mold',
   })
 
-  const set = <K extends keyof Params>(key: K, value: Params[K]) => setParams((p) => ({ ...p, [key]: value }))
+  const set = <K extends keyof Params>(key: K, value: Params[K]) =>
+    setParams((p) => clampParams({ ...p, [key]: value }))
   const frameKey = `${Math.round(params.diameter / 20)}-${Math.round(params.height / 15)}-${params.corners}`
+  const lengthRange = handleLengthRange(params.diameter, params.corners)
 
   return (
     <div className="app">
@@ -102,8 +114,8 @@ export default function App() {
             <Slider
               label="Handle length"
               value={params.handle_length}
-              range={RANGES.handle_length}
-              hint="along the press"
+              range={lengthRange}
+              hint="at least 5 mm shorter than the press"
               onChange={(v) => set('handle_length', v)}
             />
             <Slider
