@@ -1,8 +1,8 @@
 import { SupportLink } from './support'
 
 /**
- * "Made with ❤️ by Art & Flywork" and a Ko-fi link, at the bottom of the
- * index and of every creator's panel.
+ * "Made with ❤️ by Art & Flywork" and a Ko-fi tip control, at the bottom of
+ * the index and of every creator's panel.
  */
 export function MadeBy({ creator }: { creator?: string }) {
   return (

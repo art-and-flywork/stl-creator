@@ -1,0 +1,85 @@
+/* Compact dialog for the Ko-fi tip panel: backdrop matches the info sheet,
+   chrome stays minimal so the embed reads as the main content. */
+
+.support-dialog {
+  width: min(420px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.support-dialog::backdrop {
+  background: rgba(35, 70, 58, 0.82);
+  backdrop-filter: blur(3px);
+}
+
+.support-dialog[open] {
+  animation: support-dialog-in 160ms ease-out;
+}
+
+@keyframes support-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.support-dialog-panel {
+  position: relative;
+  overflow: hidden;
+  padding-top: 44px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper, #fff);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.support-dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  aspect-ratio: 1;
+  background: var(--paper, #fff);
+  cursor: pointer;
+  line-height: 0;
+}
+
+.support-dialog-close:hover {
+  background: var(--ink);
+  color: var(--paper, #fff);
+}
+
+.support-dialog-close svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.support-dialog-frame {
+  display: block;
+  width: 100%;
+  height: min(712px, calc(100vh - 48px));
+  border: 0;
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .support-dialog[open] {
+    animation: none;
+  }
+}

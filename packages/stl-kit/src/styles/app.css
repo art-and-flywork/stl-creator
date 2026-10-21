@@ -520,13 +520,20 @@
 
 .close-small {
   display: grid;
+  flex: none;
   place-items: center;
+  box-sizing: border-box;
   width: 30px;
   height: 30px;
+  min-width: 30px;
+  min-height: 30px;
   padding: 0;
   border: 1px solid var(--ink);
+  border-radius: 0;
+  aspect-ratio: 1;
   background: var(--paper);
   cursor: pointer;
+  line-height: 0;
 }
 
 .close-small:hover {
@@ -614,15 +621,45 @@
 
 /* ---------- Ko-fi ---------- */
 
+/* SupportLink is a button; default look is an inline text link. */
+.support-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.support-link.secondary {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.support-link.secondary:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .made-by .support {
   display: inline-block;
   margin-left: 12px;
   color: var(--muted);
   font-weight: 400;
+  text-decoration: none;
 }
 
 .made-by .support:hover {
   color: var(--ink);
+  text-decoration: underline;
 }
 
 /* thank-you after a download, just above the buttons */
@@ -635,7 +672,7 @@
   align-items: center;
   gap: 12px;
   max-width: min(520px, calc(100% - 32px));
-  padding: 10px 10px 10px 16px;
+  padding: 14px 12px 14px 16px;
   border: 1.5px solid var(--ink);
   background: var(--paper);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);

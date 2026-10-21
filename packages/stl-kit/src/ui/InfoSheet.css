@@ -41,7 +41,8 @@
   line-height: 1.6;
 }
 
-.info-article a {
+.info-article a,
+.info-article .support-link {
   color: var(--mat);
   text-underline-offset: 3px;
 }

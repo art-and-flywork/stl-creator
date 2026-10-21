@@ -25,9 +25,10 @@ app has its own `CLAUDE.md` and `PLAN.md`.
 - Every creator has an info sheet (`InfoSheet` from the kit, opened by the
   "Print tips, FAQ & license" link): its own print tips and FAQ, plus the
   shared `usageSection()` and `COMMON_FAQ`, and "Made with ❤️ by Art &
-  Flywork" (`MadeBy`, with the Ko-fi link) at the bottom of the panel.
-- Personal use is free; tips go through Ko-fi (`KOFI_URL`, `SupportLink`
-  in the kit). Commercial licenses: contact via artandflywork.com.
+  Flywork" (`MadeBy`, with the Ko-fi tip control) at the bottom of the panel.
+- Personal use is free; tips go through Ko-fi (`SupportLink` opens the tip
+  panel in a dialog; `KOFI_URL` / `KOFI_EMBED_URL` in the kit). Commercial
+  licenses: contact via artandflywork.com.
 - Licenses: models and the STLs made with them are (c) Art & Flywork,
   CC BY-NC 4.0 (`models/LICENSE.md`); never copy code from GPL or other
   outside projects into `models/`. App code is GPL-3.0 because it bundles
