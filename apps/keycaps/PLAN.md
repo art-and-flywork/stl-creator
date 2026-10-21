@@ -33,6 +33,9 @@ three.js viewer (react-three-fiber) · download button
 
 - **Model files:** `import.meta.glob('models/keycaps/**/*.scad', { query: '?raw' })`
   inlines them into the worker bundle (`src/scad/files.ts`); no build script.
+  The worker, renderer, viewer, fields and fonts live in
+  `packages/stl-kit`; `src/render.worker.ts` hands the kit's worker the
+  keycap files.
   The worker writes them into the OpenSCAD virtual filesystem per render.
   UI defaults are parsed from the one-line assignments in the `.scad` files,
   so they follow the model.

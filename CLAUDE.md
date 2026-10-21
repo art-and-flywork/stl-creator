@@ -9,6 +9,14 @@ app has its own `CLAUDE.md` and `PLAN.md`.
   model there, as a model change; apps never patch or copy the `.scad` files.
 - Apps are client-only Vite apps. Pass settings to OpenSCAD as `-D`
   overrides; the `.scad` files stay untouched.
-- Don't extract shared code into `packages/` speculatively. Do it when a
-  second app needs the same thing.
+- Shared code lives in `packages/stl-kit` (render worker, viewer, fields,
+  fonts, share links, base CSS, creator catalog). Don't move things there
+  speculatively; do it when a second app needs the same thing.
+- A new creator: add it to the catalog in
+  `packages/stl-kit/src/catalog/catalog.ts` with a fixed dev port, add a
+  thumbnail to `scripts/thumbnails.sh`, and a config to `.claude/launch.json`.
+- Code that runs in the render worker imports from
+  `@stl-creator/stl-kit/scad`, never the main entry (that pulls React and
+  three.js into the worker).
+- Visitors don't use CAD: plain words and mm in the UI, no OpenSCAD jargon.
 - Docs and comments in English.
