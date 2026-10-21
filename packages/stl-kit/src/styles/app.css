@@ -566,3 +566,27 @@
 }
 
 /* editor popup: two halves side by side, keycap-sized boxes */
+
+/* ---------- link to the other creators ---------- */
+
+.more-creators {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.more-creators:hover {
+  color: var(--mat);
+}
+
+.more-creators .icon {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}

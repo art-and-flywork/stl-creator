@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Choice,
   DownloadIcon,
+  MoreCreators,
   downloadStl,
   Renderer,
   Section,
@@ -206,6 +207,7 @@ export default function App() {
     <div className="app">
       <aside className="panel">
         <header className="panel-head">
+          <MoreCreators />
           <h1>Keycap STL</h1>
           <p>
             Shape a DCS-style keycap, check it in 3D, download the STL.{' '}
