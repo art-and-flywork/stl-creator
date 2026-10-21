@@ -13,6 +13,7 @@ import {
   StatusLine,
   Superseded,
   Toggle,
+  track,
   Viewer,
   type RenderStatus,
 } from '@stl-creator/stl-kit'
@@ -181,6 +182,7 @@ export default function App() {
   }, [params, mode, font, fontStatus])
 
   const share = async () => {
+    track('share', { creator: 'keycaps', mode })
     const result = await shareLink(shareUrl({ mode, params, font: fontChoice }), 'Keycap set')
     if (result === 'shared') return
     setShareState(result)
@@ -195,7 +197,9 @@ export default function App() {
   }
 
   const download = () => {
-    if (model) downloadStl(model.stl, fileName(params, model.mode))
+    if (!model) return
+    downloadStl(model.stl, fileName(params, model.mode))
+    track('download', { creator: 'keycaps', mode: model.mode })
   }
 
   const legendFont = font ? `"${font.cssFamily}", monospace` : undefined

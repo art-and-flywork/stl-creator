@@ -191,6 +191,7 @@ export default function App() {
           />
         )}
         <StageActions
+          creator="keychain"
           shareUrl={() => shareUrl({ params, font: fontChoice })}
           shareTitle="My keychain"
           shareLabel="Share this keychain"

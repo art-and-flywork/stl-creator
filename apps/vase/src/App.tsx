@@ -138,6 +138,7 @@ export default function App() {
           />
         )}
         <StageActions
+          creator="vase"
           shareUrl={() => shareUrl(params)}
           shareTitle="My vase"
           shareLabel="Share this vase"

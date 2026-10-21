@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { track } from '../analytics'
 import { shareLink, downloadStl } from './actions'
 import { DownloadIcon, ShareIcon } from './icons'
 
 /** Share and download buttons in the corner of the 3D stage. */
 export function StageActions({
+  creator,
   shareUrl,
   shareTitle,
   shareLabel,
@@ -11,6 +13,8 @@ export function StageActions({
   fileName,
   busy,
 }: {
+  /** Catalog id, for the download and share counts. */
+  creator: string
   /** Builds the link when the button is pressed. */
   shareUrl: () => string
   shareTitle: string
@@ -21,6 +25,7 @@ export function StageActions({
 }) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const share = async () => {
+    track('share', { creator })
     const result = await shareLink(shareUrl(), shareTitle)
     if (result === 'shared') return
     setState(result)
@@ -35,7 +40,11 @@ export function StageActions({
       <button
         type="button"
         className="keycap-button download"
-        onClick={() => stl && downloadStl(stl, fileName)}
+        onClick={() => {
+          if (!stl) return
+          downloadStl(stl, fileName)
+          track('download', { creator })
+        }}
         disabled={!stl || busy}
       >
         <DownloadIcon />

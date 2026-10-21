@@ -79,6 +79,16 @@ The older keycap-stl project (keycap-stl.vercel.app) was deployed by hand
 from the separate repo; point it at `/keycaps/` on this site once the
 domain is set.
 
+## Analytics
+
+Cookie-free usage stats with [Umami](https://umami.is): page views per path
+(so per creator), plus `download` and `share` events with the creator's id
+(keycaps also sends `key` or `set`). No names, legends or other input are
+sent. It is off until the Vercel environment variable
+`VITE_UMAMI_WEBSITE_ID` is set (then redeploy), never loads during
+development, and only counts visits on stl-creator.app. The code is in
+`packages/stl-kit/src/analytics.ts`.
+
 ## License
 
 GPL-3.0, like OpenSCAD and the models. See [LICENSE.md](LICENSE.md).

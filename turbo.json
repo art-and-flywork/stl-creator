@@ -7,6 +7,9 @@
       ],
       "outputs": [
         "dist/**"
+      ],
+      "env": [
+        "VITE_*"
       ]
     },
     "lint": {},

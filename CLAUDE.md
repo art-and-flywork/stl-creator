@@ -22,4 +22,6 @@ app has its own `CLAUDE.md` and `PLAN.md`.
   `@stl-creator/stl-kit/scad`, never the main entry (that pulls React and
   three.js into the worker).
 - Visitors don't use CAD: plain words and mm in the UI, no OpenSCAD jargon.
+- Analytics (Umami, cookie-free): count actions with `track(event, { creator })`
+  from the kit. Never send what visitors type (names, legends).
 - Docs and comments in English.
