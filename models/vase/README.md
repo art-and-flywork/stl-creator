@@ -1,7 +1,9 @@
 # Vase
 
 A turned vase with an even wall, a closed base and an open rim, shaped by a
-smooth curve through the base, any number of bulges and the rim.
+smooth curve through the base, any number of bulges and the rim. The
+radius is a monotone cubic of the height, so the wall never folds back or
+overshoots between two points.
 
 | Variable | Meaning (mm) |
 | --- | --- |

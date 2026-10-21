@@ -21,4 +21,9 @@ if [ "$triangles" -le 0 ]; then
   echo "FAIL (empty): $file $*" >&2
   exit 1
 fi
+pieces=$(python3 -I "$(dirname "$0")/stl-parts.py" "$out")
+if [ "$pieces" -ne 1 ]; then
+  echo "FAIL ($pieces separate pieces): $file $*" >&2
+  exit 1
+fi
 echo "ok: $file $* ($triangles triangles)"

@@ -1,4 +1,5 @@
 // Vase: a turned shape with an even wall, a closed base and an open rim.
+// Check edge cases with scripts/check-models.sh.
 // All sizes in mm. The stl-creator app overrides these with -D.
 
 height = 160;
@@ -24,21 +25,40 @@ function control_points() = concat(
   [[top_radius, height]]
 );
 
-// Uniform Catmull-Rom spline through all points (end points doubled).
-function catmull_rom(p0, p1, p2, p3, t) =
-  0.5 * (2 * p1 + (p2 - p0) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
-         + (3 * p1 - p0 - 3 * p2 + p3) * t * t * t);
+// The radius as a smooth function of height through the control points
+// (monotone cubic, "PCHIP"): it never overshoots between two points and,
+// because height only goes up, the wall can't fold back on itself.
+function slopes(p) = [for (k = [0 : len(p) - 2]) (p[k + 1][0] - p[k][0]) / (p[k + 1][1] - p[k][1])];
 
-function profile(points) =
-  let (n = len(points), at = function (i) points[max(0, min(n - 1, i))])
+function tangents(p) =
+  let (n = len(p), d = slopes(p))
+  [for (k = [0 : n - 1])
+    k == 0 ? d[0] :
+    k == n - 1 ? d[n - 2] :
+    d[k - 1] * d[k] <= 0 ? 0 :
+    let (h0 = p[k][1] - p[k - 1][1], h1 = p[k + 1][1] - p[k][1],
+         w1 = 2 * h1 + h0, w2 = h1 + 2 * h0)
+    (w1 + w2) / (w1 / d[k - 1] + w2 / d[k])];
+
+function hermite(r0, r1, m0, m1, h, t) =
+  (2 * t * t * t - 3 * t * t + 1) * r0 + (t * t * t - 2 * t * t + t) * h * m0
+  + (-2 * t * t * t + 3 * t * t) * r1 + (t * t * t - t * t) * h * m1;
+
+function profile(p) =
+  let (n = len(p), m = tangents(p))
   concat(
-    [for (i = [0 : n - 2], s = [0 : samples - 1])
-      catmull_rom(at(i - 1), at(i), at(i + 1), at(i + 2), s / samples)],
-    [points[n - 1]]
+    [for (k = [0 : n - 2], s = [0 : samples - 1])
+      let (h = p[k + 1][1] - p[k][1], t = s / samples)
+      [hermite(p[k][0], p[k + 1][0], m[k], m[k + 1], h, t), p[k][1] + h * t]],
+    [p[n - 1]]
   );
 
 // Outer curve with the radius kept above the minimum.
 outer = [for (p = profile(control_points())) [max(p[0], min_radius), p[1]]];
+
+// The wall must only go up; a curve that folds back makes loose or cracked walls.
+assert(len([for (i = [1 : len(outer) - 1]) if (outer[i][1] < outer[i - 1][1]) i]) == 0,
+       "the wall curve folds back on itself");
 
 // Full cross-section through the axis, extended straight up past the rim so
 // the offset below leaves the top open.

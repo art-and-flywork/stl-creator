@@ -6,7 +6,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "test:models": "scripts/check-models.sh"
   },
   "devDependencies": {
     "turbo": "^2.11.9"
