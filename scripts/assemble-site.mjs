@@ -3,7 +3,7 @@
 // catalog in packages/stl-kit). Run after `turbo run build`.
 import { cpSync, existsSync, rmSync } from 'node:fs'
 
-const apps = { index: '', keycaps: 'keycaps', vase: 'vase', keychain: 'keychain' }
+const apps = { index: '', keycaps: 'keycaps', vase: 'vase', keychain: 'keychain', onigiri: 'onigiri' }
 
 rmSync('site', { recursive: true, force: true })
 for (const [app, path] of Object.entries(apps)) {

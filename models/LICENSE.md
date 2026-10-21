@@ -1,6 +1,6 @@
 # License of the models
 
-The models in this folder (`keycaps/`, `vase/`, `keychain/`) and the STL
+The models in this folder (`keycaps/`, `vase/`, `keychain/`, `onigiri/`) and the STL
 files made with them, in the stl-creator apps or with OpenSCAD, are
 © Art & Flywork and licensed under the
 **Creative Commons Attribution-NonCommercial 4.0 International** license

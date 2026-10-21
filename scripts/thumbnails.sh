@@ -23,5 +23,6 @@ thumb() {
 }
 
 thumb vase 65,0,30 models/vase/vase.scad -D 'bulges=[[45,22],[105,-10],[145,6]]'
+thumb onigiri 55,0,25 models/onigiri/onigiri.scad
 thumb keychain 40,0,20 models/keychain/keychain.scad -D 'font="Arial Rounded MT Bold"' -D 'name="Robin"'
 thumb keycaps 45,0,25 models/keycaps/layouts/sofle.scad -D 'half="left"'

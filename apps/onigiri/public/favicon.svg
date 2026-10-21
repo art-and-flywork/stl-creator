@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- rounded triangle on the green cutting mat -->
+  <rect width="32" height="32" rx="7" fill="#2f5b4c"/>
+  <path d="M16 6l10 18H6z" fill="none" stroke="#f1ece1" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

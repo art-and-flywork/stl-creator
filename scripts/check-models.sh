@@ -23,6 +23,13 @@ $s models/keychain/keychain.scad -D 'hole_side="top"' -D 'name="anna"'
 $s models/keychain/keychain.scad -D 'hole_side="right"' -D 'name="LAVA"'
 $s models/keychain/keychain.scad -D hole=false
 
+# three separate parts on one plate
+PIECES=3 $s models/onigiri/onigiri.scad
+PIECES=3 $s models/onigiri/onigiri.scad -D corners=4
+PIECES=3 $s models/onigiri/onigiri.scad -D corners=5 -D diameter=120 -D height=50
+PIECES=3 $s models/onigiri/onigiri.scad -D diameter=50 -D height=15
+PIECES=3 $s models/onigiri/onigiri.scad -D diameter=140 -D height=60
+
 $s models/keycaps/key.scad
 $s models/keycaps/key.scad -D 'legend_text=""' -D 'bump="on"'
 $s models/keycaps/key.scad -D row=0 -D 'legend_text="ESC"'

@@ -11,12 +11,14 @@ apps/
   keycaps/     Sofle split-keyboard keycaps          :5171
   vase/        Vase with bulges in the wall          :5172
   keychain/    Name tag with a ring                  :5173
+  onigiri/     Rice mold (base, ring, press)         :5174
 packages/
   stl-kit/     Shared render worker, viewer, fields, catalog
 models/
   keycaps/     Keycap OpenSCAD model
   vase/        Vase OpenSCAD model
   keychain/    Keychain OpenSCAD model
+  onigiri/     Onigiri mold OpenSCAD model
 scripts/       Model checks, thumbnails, site assembly
 ```
 

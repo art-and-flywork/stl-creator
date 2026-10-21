@@ -1,5 +1,6 @@
 import keycapsImage from './images/keycaps.png'
 import keychainImage from './images/keychain.png'
+import onigiriImage from './images/onigiri.png'
 import vaseImage from './images/vase.png'
 
 // Every creator in this repo, for the index page and the "more creators"
@@ -30,6 +31,15 @@ export const CREATORS: Creator[] = [
     devPort: 5172,
     path: '/vase/',
     image: vaseImage,
+  },
+  {
+    id: 'onigiri',
+    name: 'Onigiri mold',
+    tagline: 'A rice mold: base, ring and press — pick size, height and corners.',
+    keywords: ['onigiri', 'rice', 'mold', 'sushi', 'food', 'kitchen', 'triangle'],
+    devPort: 5174,
+    path: '/onigiri/',
+    image: onigiriImage,
   },
   {
     id: 'keychain',
