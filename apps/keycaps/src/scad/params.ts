@@ -70,9 +70,9 @@ export function modelFile(mode: Mode): string {
   return mode === 'key' ? 'key.scad' : 'layouts/sofle.scad'
 }
 
-// KeyV2 draws arcs with $fs=0.1 and rounded corners with 30 facets. These
-// coarser values halve the triangle count and render time, with no visible
-// difference at keycap size, so lighter machines keep up.
+// Coarse enough to render fast on lighter machines, with no visible
+// difference at keycap size: $fs for the curves of the legend letters,
+// $shape_facets for the rounded corners (src/keycap.scad uses 24 without it).
 const RESOLUTION_DEFINES = ['$fs=0.4', '$shape_facets=12']
 
 /** `-D name=value` overrides for every setting that applies to the mode. */

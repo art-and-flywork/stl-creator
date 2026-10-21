@@ -200,7 +200,7 @@ export default function App() {
           <p>
             Shape a DCS-style keycap, check it in 3D, download the STL.{' '}
             <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
-              How it works
+              Print tips, FAQ &amp; license
             </button>
           </p>
           <div className="segments mode" role="tablist" aria-label="What to render">

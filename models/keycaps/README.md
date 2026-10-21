@@ -3,8 +3,7 @@
 ![The full Sofle set](images/sofle-set.png)
 
 OpenSCAD model for a custom keycap profile, with a complete set for the
-Sofle split keyboard. This project is a modification of
-[KeyV2](https://github.com/rsheldiii/KeyV2).
+Sofle split keyboard, written by Art & Flywork for stl-creator.
 
 The keycap profile is a modification of DCS by Signature Plastics. The main
 changes are the row heights and angles, and the bevelled top edges.
@@ -44,10 +43,13 @@ and `half` to render only the left half, only the right half, or both.
 `profile-side.scad` the side view of the rows. The command to regenerate each
 image is at the top of its file.
 
-### `src/`: the underlying code
+### `src/keycap.scad`: the keycap generator
 
-The keycap generator itself. You normally don't need to change anything
-here.
+The geometry behind every key: the body that narrows from the DCS footprint
+to the tilted top, the cylindrical dish, the bevelled edge, the Cherry MX
+stem (its cross hole grows with `stem_slop`), the tines, the homing bump and
+the inset legend. `profile.scad` calls it through `custom_key()`. Run
+`scripts/check-models.sh` at the root of stl-creator after changing it.
 
 ## Usage
 
@@ -58,5 +60,5 @@ the file you opened, so profile settings don't appear there.
 
 ## License
 
-Like KeyV2, this project is licensed under the GNU General Public License v3.0.
-See `LICENSE.md` for the full text.
+© Art & Flywork, CC BY-NC 4.0: free for personal use, commercial use needs a
+license. See [`../LICENSE.md`](../LICENSE.md).

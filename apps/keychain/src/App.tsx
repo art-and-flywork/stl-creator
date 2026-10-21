@@ -35,6 +35,7 @@ import {
   type HoleSide,
   type Params,
 } from './scad/params'
+import { Info } from './Info'
 import { clearSharedTag, readSharedTag, shareUrl } from './share'
 import './App.css'
 
@@ -51,6 +52,7 @@ export default function App() {
   const [params, setParams] = useState<Params>(shared?.params ?? stored.params)
   const [fontChoice, setFontChoice] = useState<FontChoice>(shared?.font ?? stored.font)
   const [sharedNotice, setSharedNotice] = useState(shared !== null)
+  const [infoOpen, setInfoOpen] = useState(false)
   const undoTo = useRef(stored)
   const [fontResult, setFontResult] = useState<{ key: string; font: LoadedFont | null } | null>(null)
 
@@ -110,7 +112,12 @@ export default function App() {
         <header className="panel-head">
           <MoreCreators />
           <h1>Name keychain</h1>
-          <p>Type a name, pick a font, download the file for your 3D printer.</p>
+          <p>
+            Type a name, pick a font, download the file for your 3D printer.{' '}
+            <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
+              Print tips, FAQ &amp; license
+            </button>
+          </p>
         </header>
 
         <div className="panel-scroll">
@@ -202,6 +209,7 @@ export default function App() {
           busy={busy}
         />
       </main>
+      <Info open={infoOpen} onClose={() => setInfoOpen(false)} />
     </div>
   )
 }
