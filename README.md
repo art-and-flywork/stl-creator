@@ -13,7 +13,9 @@ packages/     Shared code. The common STL-app kit (OpenSCAD worker, 3D
               viewer, controls, share links) moves here once a second app
               needs it.
 models/
-  keycaps/    Git submodule: github.com/mcbrwr/sofle-optimized-DCS-keycaps
+  keycaps/    The keycap model. Moved in from
+              github.com/mcbrwr/sofle-optimized-DCS-keycaps, which is no
+              longer kept up to date.
 ```
 
 Planned: plant pots, onigiri shapers, and more keyboard layouts for the
@@ -26,20 +28,12 @@ Needs Node 24 and pnpm (`corepack enable` picks the version from
 `package.json`).
 
 ```bash
-git clone --recurse-submodules https://github.com/art-and-flywork/stl-creator.git
+git clone https://github.com/art-and-flywork/stl-creator.git
 cd stl-creator
 pnpm install
 pnpm --filter keycaps dev   # one app
 pnpm build                  # every app, via Turborepo
 pnpm lint
-```
-
-Forgot `--recurse-submodules`? Run `git submodule update --init`.
-
-Update the keycap model to its latest commit:
-
-```bash
-git submodule update --remote models/keycaps
 ```
 
 ## Deployment
@@ -53,8 +47,7 @@ repository with its own Root Directory:
 
 Settings for the Vite apps: framework preset Vite, build command
 `turbo build`, output directory `dist`, Ignored Build Step
-`npx turbo-ignore` (a push only rebuilds the apps it changed). Vercel clones
-public submodules automatically.
+`npx turbo-ignore` (a push only rebuilds the apps it changed).
 
 ## License
 

@@ -1,4 +1,4 @@
-// The keycap model, straight from the models/keycaps submodule. Vite inlines every
+// The keycap model, straight from models/keycaps. Vite inlines every
 // .scad file as a string, so the app never keeps its own copy of the model.
 const raw = import.meta.glob('../../../../models/keycaps/**/*.scad', {
   query: '?raw',
