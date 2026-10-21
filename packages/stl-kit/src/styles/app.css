@@ -567,25 +567,31 @@
 
 /* editor popup: two halves side by side, keycap-sized boxes */
 
-/* ---------- link to the other creators ---------- */
+/* ---------- back to the index ---------- */
 
+/* Square like the other buttons; fills in on hover like .secondary. */
 .more-creators {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-  color: var(--muted);
-  font-size: 13px;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 7px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
   text-decoration: none;
 }
 
 .more-creators:hover {
-  color: var(--mat);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .more-creators .icon {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.4;
