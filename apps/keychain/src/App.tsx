@@ -1,5 +1,6 @@
 import {
   Choice,
+  MadeBy,
   MoreCreators,
   Section,
   SharedNotice,
@@ -168,6 +169,7 @@ export default function App() {
             Reset all settings
           </button>
         </div>
+        <MadeBy />
       </aside>
 
       <main className="stage">

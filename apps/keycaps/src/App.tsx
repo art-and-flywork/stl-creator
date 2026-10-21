@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Choice,
+  MadeBy,
   MoreCreators,
   Renderer,
   Section,
@@ -339,6 +340,7 @@ export default function App() {
             Reset all settings
           </button>
         </div>
+        <MadeBy />
       </aside>
 
       <main className="stage">

@@ -1,4 +1,4 @@
-import { CREATORS, creatorUrl, searchCreators, type Creator } from '@stl-creator/stl-kit/catalog'
+import { CREATORS, creatorUrl, MadeBy, searchCreators, type Creator } from '@stl-creator/stl-kit/catalog'
 import { useMemo, useState } from 'react'
 import './App.css'
 
@@ -31,10 +31,7 @@ export default function App() {
           </p>
         </div>
 
-        <footer className="credits">
-          Made by Art &amp; Flywork. Open source under the GPL-3.0 on{' '}
-          <a href="https://github.com/art-and-flywork/stl-creator">GitHub</a>.
-        </footer>
+        <MadeBy />
       </header>
 
       <main className="mat">

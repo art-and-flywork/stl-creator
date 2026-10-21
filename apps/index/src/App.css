@@ -61,14 +61,19 @@
   font-size: 13px;
 }
 
-.credits {
+
+/* the kit's maker credit, pushed to the bottom of the panel */
+.made-by {
   margin-top: auto;
+  padding: 0;
+  border-top: 0;
   color: var(--muted);
   font-size: 13px;
 }
 
-.credits a {
-  color: var(--mat);
+.made-by a {
+  color: var(--ink);
+  font-weight: 600;
   text-underline-offset: 3px;
 }
 
@@ -186,7 +191,7 @@
     font-size: 28px;
   }
 
-  .credits {
+  .made-by {
     margin-top: 20px;
   }
 
