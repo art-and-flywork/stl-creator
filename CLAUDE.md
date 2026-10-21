@@ -22,6 +22,14 @@ app has its own `CLAUDE.md` and `PLAN.md`.
   `@stl-creator/stl-kit/scad`, never the main entry (that pulls React and
   three.js into the worker).
 - Visitors don't use CAD: plain words and mm in the UI, no OpenSCAD jargon.
+- Every creator has an info sheet (`InfoSheet` from the kit, opened by the
+  "Print tips, FAQ & license" link): its own print tips and FAQ, plus the
+  shared `usageSection()` and `COMMON_FAQ`, and "Made with ❤️ by Art &
+  Flywork" (`MadeBy`) at the bottom of the panel.
+- Licenses: models and the STLs made with them are (c) Art & Flywork,
+  CC BY-NC 4.0 (`models/LICENSE.md`); never copy code from GPL or other
+  outside projects into `models/`. App code is GPL-3.0 because it bundles
+  OpenSCAD.
 - Button shapes: choices (segmented controls like Single key / Sofle set)
   are rounded; action buttons (Add bulge, Make something else) have square
   corners.

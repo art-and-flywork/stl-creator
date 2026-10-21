@@ -22,6 +22,7 @@ import {
   type Bulge,
   type Params,
 } from './scad/params'
+import { Info } from './Info'
 import { clearSharedVase, readSharedVase, shareUrl } from './share'
 import './App.css'
 
@@ -34,6 +35,7 @@ const stored = loadParams()
 export default function App() {
   const [params, setParams] = useState<Params>(shared ?? stored)
   const [sharedNotice, setSharedNotice] = useState(shared !== null)
+  const [infoOpen, setInfoOpen] = useState(false)
   const undoTo = useRef(stored)
 
   useEffect(() => {
@@ -70,7 +72,12 @@ export default function App() {
         <header className="panel-head">
           <MoreCreators />
           <h1>Vase</h1>
-          <p>Shape a vase with sliders, check it in 3D, download the file for your 3D printer.</p>
+          <p>
+            Shape a vase with sliders, check it in 3D, download the file for your 3D printer.{' '}
+            <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
+              Print tips, FAQ &amp; license
+            </button>
+          </p>
         </header>
 
         <div className="panel-scroll">
@@ -149,6 +156,7 @@ export default function App() {
           busy={busy}
         />
       </main>
+      <Info open={infoOpen} onClose={() => setInfoOpen(false)} />
     </div>
   )
 }
