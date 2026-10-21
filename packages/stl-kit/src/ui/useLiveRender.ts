@@ -13,10 +13,21 @@ interface Options {
   label: string
   /** Added to the warnings of every finished render. */
   warnings?: string[]
+  /** Show OpenSCAD's own warnings too (jargon for visitors; on in development). */
+  modelWarnings?: boolean
 }
 
 /** Re-renders shortly after the last change; the latest settings win. */
-export function useLiveRender({ spawnWorker, file, defines, font, ready = true, label, warnings = [] }: Options) {
+export function useLiveRender({
+  spawnWorker,
+  file,
+  defines,
+  font,
+  ready = true,
+  label,
+  warnings = [],
+  modelWarnings = import.meta.env.DEV,
+}: Options) {
   const [stl, setStl] = useState<ArrayBuffer | null>(null)
   const [status, setStatus] = useState<RenderStatus>({ kind: 'idle' })
   const renderer = useRef<Renderer | null>(null)
@@ -38,7 +49,7 @@ export function useLiveRender({ spawnWorker, file, defines, font, ready = true, 
             kind: 'done',
             ms: result.ms,
             triangles: (result.stl.byteLength - 84) / 50,
-            warnings: [...JSON.parse(extra), ...result.logs.filter((l) => l.startsWith('WARNING'))],
+            warnings: [...JSON.parse(extra), ...(modelWarnings ? result.logs.filter((l) => l.startsWith('WARNING')) : [])],
           })
         },
         (error: Error & { logs?: string[] }) => {
@@ -48,7 +59,7 @@ export function useLiveRender({ spawnWorker, file, defines, font, ready = true, 
       )
     }, 120)
     return () => clearTimeout(timer)
-  }, [spawnWorker, file, key, font, ready, label, extra])
+  }, [spawnWorker, file, key, font, ready, label, extra, modelWarnings])
 
   return { stl, status, busy: status.kind === 'rendering' }
 }

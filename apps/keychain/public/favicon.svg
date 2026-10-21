@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- a name tag with a ring, on the green cutting mat -->
+  <rect width="32" height="32" rx="7" fill="#2f5b4c"/>
+  <circle cx="7.5" cy="16" r="4" fill="none" stroke="#f1ece1" stroke-width="2.4"/>
+  <rect x="10" y="10" width="18" height="12" rx="4" fill="#f1ece1"/>
+  <path d="M14 19v-6h2.5a1.8 1.8 0 0 1 0 3.6H14M20 13v6h4" fill="none" stroke="#2f5b4c" stroke-width="1.6"/>
+</svg>
