@@ -29,6 +29,8 @@ PIECES=3 $s models/onigiri/onigiri.scad -D corners=4
 PIECES=3 $s models/onigiri/onigiri.scad -D corners=5 -D diameter=120 -D height=50
 PIECES=3 $s models/onigiri/onigiri.scad -D diameter=50 -D height=15
 PIECES=3 $s models/onigiri/onigiri.scad -D diameter=140 -D height=60
+PIECES=3 $s models/onigiri/onigiri.scad -D corner_radius=2
+PIECES=3 $s models/onigiri/onigiri.scad -D corner_radius=20
 
 $s models/keycaps/key.scad
 $s models/keycaps/key.scad -D 'legend_text=""' -D 'bump="on"'

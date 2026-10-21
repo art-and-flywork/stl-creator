@@ -23,7 +23,7 @@ export function Info({ open, onClose }: { open: boolean; onClose: () => void }) 
       open={open}
       onClose={onClose}
       title="About the onigiri mold"
-      lead="Set the size of the rice cavity, how tall the ring is, and how many corners (3–5). Download one STL with the base, ring and press ready to print."
+      lead="Set the size of the rice cavity, how tall the ring is, how many corners (3–5), and how soft those corners are. Download one STL with the base, ring and press ready to print."
       sections={[
         {
           id: 'print-tips',

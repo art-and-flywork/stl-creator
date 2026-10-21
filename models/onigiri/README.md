@@ -9,6 +9,7 @@ polygon (3–5 corners), classic triangle by default.
 | `diameter` | rice cavity width (mm) — inner opening of the ring |
 | `height` | ring / rice thickness (mm) |
 | `corners` | 3, 4 or 5 |
+| `corner_radius` | how soft the corners are (mm) |
 
 Wall thickness, press clearance and plate details are fixed in the model.
 

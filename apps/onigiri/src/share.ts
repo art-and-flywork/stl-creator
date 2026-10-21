@@ -1,7 +1,7 @@
 // Shareable links: the settings that differ from the defaults, as base64url
 // JSON in the URL hash.
 import { changedFrom, clearHash, fromBase64Url, mergeKnown, toBase64Url } from '@stl-creator/stl-kit'
-import { clampCorners, DEFAULTS, type Params } from './scad/params'
+import { clampCornerRadius, clampCorners, DEFAULTS, type Params } from './scad/params'
 
 const PREFIX = '#onigiri='
 
@@ -18,7 +18,11 @@ export function readSharedOnigiri(): Params | null {
     const payload = JSON.parse(fromBase64Url(location.hash.slice(PREFIX.length)))
     if (payload.v !== 1) return null
     const params = mergeKnown(DEFAULTS, payload.p ?? {})
-    return { ...params, corners: clampCorners(params.corners) }
+    return {
+      ...params,
+      corners: clampCorners(params.corners),
+      corner_radius: clampCornerRadius(params.corner_radius),
+    }
   } catch {
     return null
   }

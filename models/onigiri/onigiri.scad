@@ -5,6 +5,7 @@
 diameter = 90; // rice cavity width (inner opening of the ring)
 height = 35; // ring / rice thickness
 corners = 3; // 3 = classic triangle, up to 5
+corner_radius = 12; // how soft the corners are (mm)
 
 wall = 3.5;
 clearance = 0.4; // press sits loose inside the ring
@@ -20,8 +21,9 @@ $fn = 64;
 
 assert(corners >= 3 && corners <= 5, "corners must be 3, 4 or 5");
 
-// Corner radius: scales with size; capped so small shapes stay pointy enough.
-corner_r = min(diameter * 0.2, diameter * 0.35 / corners);
+// Cap below the inradius so offset(delta=-r) does not erase the polygon.
+max_corner_r = diameter / 2 * cos(180 / corners) * 0.9;
+corner_r = min(max(corner_radius, 0.5), max_corner_r);
 
 // Rounded regular n-gon whose overall width is about `d`.
 module profile(d) {

@@ -92,6 +92,13 @@ export default function App() {
               options={[...CORNER_OPTIONS]}
               onChange={(v) => set('corners', v)}
             />
+            <Slider
+              label="Corner radius"
+              value={params.corner_radius}
+              range={RANGES.corner_radius}
+              hint="how soft the corners are"
+              onChange={(v) => set('corner_radius', v)}
+            />
           </Section>
 
           <button type="button" className="link reset-all" onClick={() => setParams({ ...DEFAULTS })}>
