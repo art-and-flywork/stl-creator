@@ -2,11 +2,16 @@
 
 1. [x] Monorepo with pnpm workspaces and Turborepo; keycap-stl moved in as
        `apps/keycaps` (history kept), its model as `models/keycaps`.
-2. [ ] Vercel: connect the keycap-stl project to this repo (Root Directory
-       `apps/keycaps`) and add keycaps-stl.artandflywork.com.
-3. [ ] Plant pot configurator (`apps/plant-pots`, model in
-       `models/plant-pot`). Extract the shared STL-app kit into
-       `packages/stl-kit` while building it.
+2. [x] Vercel: one project, stl-creator (team artandflywork), serves every
+       app as one site (index at `/`, creators under their own path).
+2a. [ ] A domain for stl-creator; redirect the old keycap-stl project to
+       `/keycaps/` on it.
+3. [x] Creator index with search (`apps/index`), a vase creator
+       (`apps/vase`) and a name keychain creator (`apps/keychain`); the
+       shared STL-app kit is extracted into `packages/stl-kit`. See
+       `docs/superpowers/specs/2026-10-21-index-and-vase-design.md`.
+3b. [ ] Plant pot configurator (`apps/plant-pots`, model in
+       `models/plant-pot`), on the kit.
 4. [ ] Onigiri shaper.
 5. [ ] More keyboard layouts for the keycaps app: one layout file per
        keyboard, read by both the .scad and the app (replaces the copy in

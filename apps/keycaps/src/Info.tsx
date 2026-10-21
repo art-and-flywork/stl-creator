@@ -1,6 +1,6 @@
 import { useCallback, useRef, type MouseEvent, type ReactNode } from 'react'
 import { ProfileStrip } from './components/ProfileStrip'
-import { SheetDialog } from './components/SheetDialog'
+import { SheetDialog } from '@stl-creator/stl-kit'
 import { DEFAULTS } from './scad/params'
 import './Info.css'
 

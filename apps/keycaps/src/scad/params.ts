@@ -1,3 +1,4 @@
+import { loadStored, saveStored, toScad, type Range } from '@stl-creator/stl-kit'
 import { scadDefaults } from './files'
 
 export type Mode = 'key' | 'set'
@@ -47,13 +48,6 @@ export const DEFAULTS = {
   ...scadDefaults('key.scad'),
 } as unknown as Params
 
-export interface Range {
-  min: number
-  max: number
-  step: number
-  unit?: string
-}
-
 export const RANGES: Record<string, Range> = {
   length: { min: 1, max: 2.25, step: 0.25, unit: 'u' },
   roll: { min: -20, max: 20, step: 0.5, unit: '°' },
@@ -70,15 +64,6 @@ export const RANGES: Record<string, Range> = {
   stem_tine_height: { min: 0.05, max: 0.6, step: 0.01, unit: 'mm' },
   thumb_length: { min: 1, max: 2.25, step: 0.25, unit: 'u' },
   thumb_roll: { min: 0, max: 25, step: 0.5, unit: '°' },
-}
-
-/** OpenSCAD literal for a JS value. JSON string escaping matches OpenSCAD's. */
-export function toScad(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(toScad).join(', ')}]`
-  if (typeof value === 'string') return JSON.stringify(value)
-  if (typeof value === 'boolean') return value ? 'true' : 'false'
-  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
-  throw new Error(`Cannot pass ${String(value)} to OpenSCAD`)
 }
 
 export function modelFile(mode: Mode): string {
@@ -104,22 +89,13 @@ export function toDefines(params: Params, mode: Mode, font?: string): string[] {
 const STORAGE_KEY = 'keycap-stl:params'
 
 export function loadParams(): Params {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}')
-    // only keep known settings, so renamed .scad variables don't linger
-    const known = Object.fromEntries(
-      Object.entries(saved).filter(([k]) => k in DEFAULTS),
-    )
-    return { ...DEFAULTS, ...known }
-  } catch {
-    return { ...DEFAULTS }
-  }
+  // only keep known settings, so renamed .scad variables don't linger
+  return loadStored(STORAGE_KEY, { ...DEFAULTS }, (defaults, saved) => ({
+    ...defaults,
+    ...Object.fromEntries(Object.entries(saved as object).filter(([k]) => k in defaults)),
+  }))
 }
 
 export function saveParams(params: Params) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(params))
-  } catch {
-    // storage unavailable (private mode); settings just won't persist
-  }
+  saveStored(STORAGE_KEY, params)
 }

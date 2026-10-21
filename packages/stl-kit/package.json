@@ -1,0 +1,41 @@
+{
+  "name": "@stl-creator/stl-kit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./scad": "./src/scad.ts",
+    "./catalog": "./src/catalog/catalog.ts",
+    "./worker": "./src/render/worker.ts",
+    "./fonts": "./src/fonts/index.ts",
+    "./styles/base.css": "./src/styles/base.css",
+    "./styles/app.css": "./src/styles/app.css"
+  },
+  "scripts": {
+    "lint": "oxlint && tsc --noEmit -p .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "openscad-wasm-prebuilt": "^1.2.0",
+    "oxlint": "^1.89.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.186.1",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  },
+  "peerDependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "openscad-wasm-prebuilt": "^1.2.0",
+    "react": "^19.3.1",
+    "three": "^0.186.1"
+  }
+}

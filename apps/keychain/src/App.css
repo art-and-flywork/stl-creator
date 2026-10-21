@@ -1,0 +1,7 @@
+/* Keychain-specific styles; the shared layout comes from @stl-creator/stl-kit. */
+
+.name-input {
+  height: 52px !important;
+  font-size: 26px;
+  text-align: center;
+}

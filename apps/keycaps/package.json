@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.2",
+    "@stl-creator/stl-kit": "workspace:*",
     "openscad-wasm-prebuilt": "^1.2.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

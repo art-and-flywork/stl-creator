@@ -11,7 +11,8 @@ model keeps a single source of truth.
 - Vite + React + TypeScript app in the stl-creator monorepo
   (`pnpm --filter keycaps dev`, `pnpm --filter keycaps build`). It started
   as its own repo, keycap-stl; its history is kept in this one.
-- `models/keycaps` (monorepo root) is a git submodule of the keycap repo.
+- `models/keycaps` (monorepo root) holds the keycap model as plain files,
+  moved in from the keycap repo (which is no longer kept up to date).
   The app uses those `.scad` files as they are; it never keeps its own copy
   of the model.
 - Milestones 0 and 1 are done: single key and full set render in a Web
@@ -32,9 +33,12 @@ three.js viewer (react-three-fiber) · download button
 
 - **Model files:** `import.meta.glob('models/keycaps/**/*.scad', { query: '?raw' })`
   inlines them into the worker bundle (`src/scad/files.ts`); no build script.
+  The worker, renderer, viewer, fields and fonts live in
+  `packages/stl-kit`; `src/render.worker.ts` hands the kit's worker the
+  keycap files.
   The worker writes them into the OpenSCAD virtual filesystem per render.
   UI defaults are parsed from the one-line assignments in the `.scad` files,
-  so they follow the submodule.
+  so they follow the model.
 - **Parameters:** every setting is passed as an OpenSCAD `-D name=value`
   override. This also works for variables in `profile.scad`, so the `.scad`
   files need no changes. Strings need quoting (`-D 'legend_text="F"'`),
@@ -123,10 +127,9 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
 ### 5. Deploy
 - [x] Deployed to Vercel (team artandflywork, project keycap-stl), so far
       with `vercel deploy` from a local checkout.
-- [ ] Deploy from this monorepo on push: Vercel project with Root Directory
-      `apps/keycaps`, submodules on, `npx turbo-ignore` as Ignored Build
-      Step; domain keycaps-stl.artandflywork.com.
-- [ ] Workflow or Dependabot rule to bump the `models/keycaps` submodule.
+- [x] Deploy from this monorepo on push: part of the stl-creator Vercel
+      project, served at `/keycaps/` (Vite `base`).
+- [ ] Redirect keycap-stl.vercel.app to `/keycaps/` on the stl-creator site.
 
 ## Open decisions
 

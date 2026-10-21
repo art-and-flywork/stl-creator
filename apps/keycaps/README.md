@@ -18,12 +18,7 @@ pnpm install
 pnpm --filter keycaps dev
 ```
 
-The keycap model lives in the `models/keycaps` git submodule at the root of
-the monorepo. To update it, from the root:
-
-```bash
-git submodule update --remote models/keycaps
-```
+The keycap model lives in `models/keycaps` at the root of the monorepo.
 
 ## License
 
