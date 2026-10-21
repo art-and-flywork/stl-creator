@@ -6,9 +6,18 @@ export interface Params {
   height: number
   corners: number
   corner_radius: number
+  handle_length: number
+  handle_height: number
 }
 
-const SETTINGS = ['diameter', 'height', 'corners', 'corner_radius'] as const
+const SETTINGS = [
+  'diameter',
+  'height',
+  'corners',
+  'corner_radius',
+  'handle_length',
+  'handle_height',
+] as const
 
 /** Defaults read from onigiri.scad itself (only the settings, not its internals). */
 export const DEFAULTS = Object.fromEntries(
@@ -19,6 +28,8 @@ export const RANGES = {
   diameter: { min: 50, max: 140, step: 1, unit: 'mm' },
   height: { min: 15, max: 60, step: 1, unit: 'mm' },
   corner_radius: { min: 2, max: 40, step: 0.5, unit: 'mm' },
+  handle_length: { min: 30, max: 90, step: 1, unit: 'mm' },
+  handle_height: { min: 12, max: 50, step: 1, unit: 'mm' },
 } satisfies Record<string, Range>
 
 export const CORNER_OPTIONS = [
@@ -32,9 +43,8 @@ export function clampCorners(n: number): number {
   return Math.min(5, Math.max(3, Math.round(n)))
 }
 
-/** Keep corner radius in the UI range. */
-export function clampCornerRadius(n: number): number {
-  return Math.min(RANGES.corner_radius.max, Math.max(RANGES.corner_radius.min, n))
+function clampRange(n: number, range: Range): number {
+  return Math.min(range.max, Math.max(range.min, n))
 }
 
 /** `-D name=value` overrides for every setting. */
@@ -42,7 +52,9 @@ export function toDefines(params: Params): string[] {
   const clean = {
     ...params,
     corners: clampCorners(params.corners),
-    corner_radius: clampCornerRadius(params.corner_radius),
+    corner_radius: clampRange(params.corner_radius, RANGES.corner_radius),
+    handle_length: clampRange(params.handle_length, RANGES.handle_length),
+    handle_height: clampRange(params.handle_height, RANGES.handle_height),
   }
   return Object.entries(clean).map(([name, value]) => `${name}=${toScad(value)}`)
 }
@@ -58,7 +70,9 @@ export function loadParams(): Params {
     return {
       ...merged,
       corners: clampCorners(merged.corners),
-      corner_radius: clampCornerRadius(merged.corner_radius),
+      corner_radius: clampRange(merged.corner_radius, RANGES.corner_radius),
+      handle_length: clampRange(merged.handle_length, RANGES.handle_length),
+      handle_height: clampRange(merged.handle_height, RANGES.handle_height),
     }
   })
 }

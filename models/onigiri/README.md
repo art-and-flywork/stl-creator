@@ -10,6 +10,8 @@ polygon (3–5 corners), classic triangle by default.
 | `height` | ring / rice thickness (mm) |
 | `corners` | 3, 4 or 5 |
 | `corner_radius` | how soft the corners are (mm) |
+| `handle_length` | tip-to-tip length of the press handle (mm) |
+| `handle_height` | how tall the handle stands above the press (mm) |
 
 Wall thickness, press clearance and plate details are fixed in the model.
 

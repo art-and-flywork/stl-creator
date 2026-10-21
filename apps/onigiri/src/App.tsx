@@ -99,6 +99,20 @@ export default function App() {
               hint="how soft the corners are"
               onChange={(v) => set('corner_radius', v)}
             />
+            <Slider
+              label="Handle length"
+              value={params.handle_length}
+              range={RANGES.handle_length}
+              hint="along the press"
+              onChange={(v) => set('handle_length', v)}
+            />
+            <Slider
+              label="Handle height"
+              value={params.handle_height}
+              range={RANGES.handle_height}
+              hint="how tall the grip is"
+              onChange={(v) => set('handle_height', v)}
+            />
           </Section>
 
           <button type="button" className="link reset-all" onClick={() => setParams({ ...DEFAULTS })}>

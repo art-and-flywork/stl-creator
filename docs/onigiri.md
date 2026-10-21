@@ -11,6 +11,8 @@ as `-D` overrides; the `.scad` file is not patched by the app.
 | Height | `height` | Ring / rice thickness, 15–60 mm |
 | Corners | `corners` | 3, 4 or 5 (segmented control) |
 | Corner radius | `corner_radius` | Softness of the corners, 2–40 mm (the model caps it so the shape stays valid) |
+| Handle length | `handle_length` | Tip-to-tip grip length, 30–90 mm |
+| Handle height | `handle_height` | How tall the grip is, 12–50 mm |
 
 One download: base, ring and press laid out on a single plate (`PIECES=3` for
 smoke renders).
