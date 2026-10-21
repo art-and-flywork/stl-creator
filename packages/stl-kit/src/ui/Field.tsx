@@ -1,5 +1,12 @@
 import { useId, useState, type ReactNode } from 'react'
-import type { Range } from '../scad/params'
+
+/** Slider range of a setting. */
+export interface Range {
+  min: number
+  max: number
+  step: number
+  unit?: string
+}
 
 interface SliderProps {
   label: string

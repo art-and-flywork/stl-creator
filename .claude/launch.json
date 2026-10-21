@@ -1,11 +1,9 @@
 {
   "version": "0.0.1",
   "configurations": [
-    {
-      "name": "keycaps",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "keycaps", "dev", "--port", "5179", "--strictPort"],
-      "port": 5179
-    }
+    { "name": "index", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "index", "dev", "--port", "5170", "--strictPort"], "port": 5170 },
+    { "name": "keycaps", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "keycaps", "dev", "--port", "5171", "--strictPort"], "port": 5171 },
+    { "name": "vase", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "vase", "dev", "--port", "5172", "--strictPort"], "port": 5172 },
+    { "name": "keychain", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "keychain", "dev", "--port", "5173", "--strictPort"], "port": 5173 }
   ]
 }

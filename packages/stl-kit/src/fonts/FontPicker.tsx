@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { fetchFontList, type FontChoice, type FontFamily } from '../fonts'
+import { fetchFontList, type FontChoice, type FontFamily } from './fonts'
 
 interface Props {
   value: FontChoice

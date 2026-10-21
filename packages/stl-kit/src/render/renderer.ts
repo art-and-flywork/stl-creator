@@ -1,4 +1,4 @@
-import type { RenderRequest, RenderResponse } from './openscad.worker'
+import type { RenderRequest, RenderResponse } from './worker'
 
 export interface RenderResult {
   stl: ArrayBuffer
@@ -21,12 +21,23 @@ type Job = Omit<RenderRequest, 'id'> & {
 // (a full set takes seconds) are killed so the latest settings show up fast.
 const CANCEL_AFTER_MS = 800
 
-/** Runs renders in a Web Worker, latest request wins. */
+/**
+ * Runs renders in a Web Worker, latest request wins. `spawnWorker` creates
+ * the app's worker, e.g.
+ * `() => new Worker(new URL('./render.worker.ts', import.meta.url), { type: 'module' })`
+ * (Vite only bundles workers created like that in the app itself).
+ */
 export class Renderer {
-  private worker = this.spawn()
+  private spawnWorker: () => Worker
+  private worker: Worker
   private nextId = 1
   private running: { id: number; job: Job; started: number } | null = null
   private pending: Job | null = null
+
+  constructor(spawnWorker: () => Worker) {
+    this.spawnWorker = spawnWorker
+    this.worker = this.spawn()
+  }
 
   render(request: Omit<RenderRequest, 'id'>): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
@@ -43,9 +54,7 @@ export class Renderer {
   }
 
   private spawn() {
-    const worker = new Worker(new URL('./openscad.worker.ts', import.meta.url), {
-      type: 'module',
-    })
+    const worker = this.spawnWorker()
     worker.onmessage = (event: MessageEvent<RenderResponse>) => this.done(event.data)
     worker.onerror = (event) => {
       this.running?.job.reject(new Error(event.message || 'The render worker crashed'))

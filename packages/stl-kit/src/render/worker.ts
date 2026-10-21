@@ -1,8 +1,9 @@
 /// <reference lib="webworker" />
 // Renders one model per message. OpenSCAD's main() can only run once per
 // WASM instance, so every render gets a fresh instance (about 20 ms).
+// Each app has a tiny worker entry that calls serveRenders with its own
+// model files.
 import { createOpenSCAD } from 'openscad-wasm-prebuilt'
-import { modelFiles } from './files'
 
 export interface RenderRequest {
   id: number
@@ -37,8 +38,13 @@ function mkdirs(fs: FS, path: string) {
   }
 }
 
-self.onmessage = async (event: MessageEvent<RenderRequest>) => {
-  const { id, file, defines, font } = event.data
+/** Answer render requests with the given model files, written under `/<root>/`. */
+export function serveRenders(modelFiles: Record<string, string>, root: string) {
+  self.onmessage = (event: MessageEvent<RenderRequest>) => render(modelFiles, root, event.data)
+}
+
+async function render(modelFiles: Record<string, string>, root: string, request: RenderRequest) {
+  const { id, file, defines, font } = request
   const logs: string[] = []
   const start = performance.now()
   try {
@@ -50,8 +56,8 @@ self.onmessage = async (event: MessageEvent<RenderRequest>) => {
     const fs = instance.FS
 
     for (const [path, source] of Object.entries(modelFiles)) {
-      mkdirs(fs, `/keycaps/${path.split('/').slice(0, -1).join('/')}`)
-      fs.writeFile(`/keycaps/${path}`, source)
+      mkdirs(fs, `/${root}/${path.split('/').slice(0, -1).join('/')}`)
+      fs.writeFile(`/${root}/${path}`, source)
     }
     // OpenSCAD reads fonts/fonts.conf next to its application path ("/")
     mkdirs(fs, '/fonts')
@@ -59,7 +65,7 @@ self.onmessage = async (event: MessageEvent<RenderRequest>) => {
     if (font) fs.writeFile('/fonts/legend.ttf', font)
 
     const args = [
-      `/keycaps/${file}`,
+      `/${root}/${file}`,
       '--backend=manifold',
       '--export-format=binstl',
       '-o',

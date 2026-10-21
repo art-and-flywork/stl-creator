@@ -1,3 +1,5 @@
+import { loadStored, saveStored } from '../storage'
+
 // Google Fonts via Fontsource: a JSON list of every family, and static TTF
 // files on jsDelivr. Both send CORS headers, and OpenSCAD's FreeType reads
 // TTF directly (the Google Fonts CSS API serves WOFF2 to browsers).
@@ -112,20 +114,10 @@ export function readFontNames(bytes: Uint8Array): { family: string; subfamily: s
   return { family: names.get(1) ?? 'Unknown', subfamily: names.get(2) ?? 'Regular' }
 }
 
-const STORAGE_KEY = 'keycap-stl:font'
-
-export function loadFontChoice(): FontChoice {
-  try {
-    return { ...DEFAULT_FONT, ...JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') }
-  } catch {
-    return DEFAULT_FONT
-  }
+export function loadFontChoice(storageKey: string, fallback: FontChoice = DEFAULT_FONT): FontChoice {
+  return loadStored(storageKey, fallback)
 }
 
-export function saveFontChoice(choice: FontChoice) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(choice))
-  } catch {
-    // storage unavailable
-  }
+export function saveFontChoice(storageKey: string, choice: FontChoice) {
+  saveStored(storageKey, choice)
 }

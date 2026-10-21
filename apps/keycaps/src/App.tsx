@@ -1,12 +1,32 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Choice, Section, Slider, Toggle } from './components/Field'
-import { FontPicker } from './components/FontPicker'
+import {
+  Choice,
+  DownloadIcon,
+  downloadStl,
+  Renderer,
+  Section,
+  ShareIcon,
+  shareLink,
+  SheetDialog,
+  Slider,
+  StatusLine,
+  Superseded,
+  Toggle,
+  Viewer,
+  type RenderStatus,
+} from '@stl-creator/stl-kit'
+import {
+  FontPicker,
+  loadFont,
+  loadFontChoice,
+  saveFontChoice,
+  type FontChoice,
+  type LoadedFont,
+} from '@stl-creator/stl-kit/fonts'
+import { KeyPicker } from './components/KeyPicker'
 import { ProfileStrip } from './components/ProfileStrip'
 import { LegendGrid } from './components/LegendGrid'
-import { SheetDialog } from './components/SheetDialog'
-import { Viewer } from './components/Viewer'
 import { Info } from './Info'
-import { loadFont, loadFontChoice, saveFontChoice, type FontChoice, type LoadedFont } from './fonts'
 import {
   DEFAULTS,
   loadParams,
@@ -20,27 +40,24 @@ import {
   type Params,
   type RowKey,
 } from './scad/params'
-import { Renderer, Superseded } from './scad/renderer'
 import { layoutKeys, setLegend, type LayoutKey } from './scad/sofle'
 import { clearSharedSet, readSharedSet, shareUrl } from './share'
 import './App.css'
+
+const spawnWorker = () => new Worker(new URL('./render.worker.ts', import.meta.url), { type: 'module' })
+
+const FONT_KEY = 'keycap-stl:font'
 
 // A shared link replaces the stored settings; keep those for the undo button.
 const storedSettings = () => ({
   params: loadParams(),
   mode: (localStorage.getItem('keycap-stl:mode') as Mode) || 'key',
-  font: loadFontChoice(),
+  font: loadFontChoice(FONT_KEY),
 })
 const shared = readSharedSet()
 const stored = storedSettings()
 
 const ROWS = [0, 1, 2, 3, 4].map((r) => ({ value: r, label: r === 4 ? 'Thumb' : `Row ${r}` }))
-
-type Status =
-  | { kind: 'idle' }
-  | { kind: 'rendering'; label: string; expectedMs: number; run: number; big: boolean }
-  | { kind: 'done'; ms: number; triangles: number; warnings: string[] }
-  | { kind: 'error'; message: string; logs: string[] }
 
 function fileName(params: Params, mode: Mode) {
   if (mode === 'set') return `sofle-${params.half}.stl`
@@ -84,7 +101,7 @@ export default function App() {
   const [selection, setSelection] = useState<{ id: string; from: 'view' | 'panel' } | null>(null)
   const selectedKey = selection?.id ?? null
   const stl = model?.stl ?? null
-  const [status, setStatus] = useState<Status>({ kind: 'idle' })
+  const [status, setStatus] = useState<RenderStatus>({ kind: 'idle' })
   const [infoOpen, setInfoOpen] = useState(false)
   const [legendsOpen, setLegendsOpen] = useState(false)
   const renderer = useRef<Renderer | null>(null)
@@ -98,7 +115,7 @@ export default function App() {
     setParams((p) => ({ ...p, [key]: p[key].map((v, i) => (i === row ? value : v)) }))
 
   useEffect(() => saveParams(params), [params])
-  useEffect(() => saveFontChoice(fontChoice), [fontChoice])
+  useEffect(() => saveFontChoice(FONT_KEY, fontChoice), [fontChoice])
   useEffect(() => localStorage.setItem('keycap-stl:mode', mode), [mode])
 
   const fontKey = `${fontChoice.id}-${fontChoice.weight}-${fontChoice.italic}`
@@ -119,7 +136,7 @@ export default function App() {
   // re-render shortly after the last change
   useEffect(() => {
     if (fontStatus === 'loading') return
-    renderer.current ??= new Renderer()
+    renderer.current ??= new Renderer(spawnWorker)
     const timer = setTimeout(() => {
       const view = mode === 'set' ? `set-${params.half}` : 'key'
       setStatus({
@@ -163,23 +180,9 @@ export default function App() {
   }, [params, mode, font, fontStatus])
 
   const share = async () => {
-    const url = shareUrl({ mode, params, font: fontChoice })
-    // the share sheet on phones and tablets, the clipboard elsewhere
-    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-      try {
-        await navigator.share({ title: 'Keycap set', url })
-      } catch {
-        // cancelled
-      }
-      return
-    }
-    try {
-      await navigator.clipboard.writeText(url)
-      setShareState('copied')
-    } catch {
-      setShareState('failed')
-      window.prompt('Copy this link:', url)
-    }
+    const result = await shareLink(shareUrl({ mode, params, font: fontChoice }), 'Keycap set')
+    if (result === 'shared') return
+    setShareState(result)
     setTimeout(() => setShareState('idle'), 2000)
   }
 
@@ -191,10 +194,7 @@ export default function App() {
   }
 
   const download = () => {
-    if (!model) return
-    const url = URL.createObjectURL(new Blob([model.stl], { type: 'model/stl' }))
-    Object.assign(document.createElement('a'), { href: url, download: fileName(params, model.mode) }).click()
-    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    if (model) downloadStl(model.stl, fileName(params, model.mode))
   }
 
   const legendFont = font ? `"${font.cssFamily}", monospace` : undefined
@@ -353,22 +353,23 @@ export default function App() {
       </aside>
 
       <main className="stage">
-        <Viewer
-          stl={stl}
-          frameKey={model?.view ?? mode}
-          editing={
-            mode === 'set' && model?.mode === 'set'
-              ? {
-                  keys: model.keys,
-                  selected: selectedKey,
-                  inputOpen: selection?.from === 'view',
-                  onSelect: (id) => setSelection(id ? { id, from: 'view' } : null),
-                  onLegend: (id, legend) => setParams((p) => setLegend(p, id, legend)),
-                  fontFamily: legendFont,
-                }
-              : undefined
-          }
-        />
+        <Viewer stl={stl} frameKey={model?.view ?? mode} onPointerMissed={() => setSelection(null)}>
+          {mode === 'set' && model?.mode === 'set'
+            ? (shown) => (
+                <KeyPicker
+                  model={shown}
+                  editing={{
+                    keys: model.keys,
+                    selected: selectedKey,
+                    inputOpen: selection?.from === 'view',
+                    onSelect: (id) => setSelection(id ? { id, from: 'view' } : null),
+                    onLegend: (id, legend) => setParams((p) => setLegend(p, id, legend)),
+                    fontFamily: legendFont,
+                  }}
+                />
+              )
+            : undefined}
+        </Viewer>
         <StatusLine status={status} hasModel={stl !== null} />
         {sharedNotice && (
           <div className="shared-notice" role="status">
@@ -419,71 +420,5 @@ export default function App() {
         </div>
       </SheetDialog>
     </div>
-  )
-}
-
-function StatusLine({ status, hasModel }: { status: Status; hasModel: boolean }) {
-  if (status.kind === 'idle') return <Loader label="Loading OpenSCAD" expectedMs={2000} big />
-  if (status.kind === 'rendering')
-    return (
-      <Loader
-        key={status.run}
-        label={hasModel ? status.label : 'Loading OpenSCAD'}
-        expectedMs={status.expectedMs + (hasModel ? 0 : 1500)}
-        big={status.big || !hasModel}
-      />
-    )
-  if (status.kind === 'error')
-    return (
-      <div className="status error" role="alert">
-        <strong>Render failed: {status.message}</strong>
-        {status.logs.length > 0 && <pre>{status.logs.slice(-8).join('\n')}</pre>}
-      </div>
-    )
-  return (
-    <div className="status">
-      {Math.round(status.ms)} ms · {status.triangles.toLocaleString()} triangles
-      {status.warnings.map((w) => (
-        <div key={w} className="warning">
-          {w}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-/**
- * OpenSCAD reports no progress, so the bar fills over the time the previous
- * render of this view took and slows down near the end.
- */
-function Loader({ label, expectedMs, big }: { label: string; expectedMs: number; big: boolean }) {
-  return (
-    <div className={big ? 'loader big' : 'loader'} role="status">
-      <span>{label}…</span>
-      <div className="ruler" aria-hidden="true">
-        <div className="fill" style={{ animationDuration: `${Math.max(400, expectedMs)}ms` }} />
-      </div>
-    </div>
-  )
-}
-
-// Icons drawn like a technical drawing: thin strokes, square ends and open
-// arrowheads; the download base line has end ticks like a dimension line.
-
-function ShareIcon() {
-  return (
-    <svg className="icon" viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M8 4H3v13h13v-5" />
-      <path d="M9 11l8-8M12 3h5v5" />
-    </svg>
-  )
-}
-
-function DownloadIcon() {
-  return (
-    <svg className="icon" viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M10 2v11M6 9l4 4 4-4" />
-      <path d="M3 17h14M3 15v4M17 15v4" />
-    </svg>
   )
 }
