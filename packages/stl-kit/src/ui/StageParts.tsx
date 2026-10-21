@@ -3,9 +3,10 @@ import { track } from '../analytics'
 import { shareLink, downloadStl } from './actions'
 import { DownloadIcon, ShareIcon } from './icons'
 
-/** Share and download buttons in the corner of the 3D stage. */
+/** Share and download buttons in the corner of the 3D stage; every creator uses these. */
 export function StageActions({
   creator,
+  eventData,
   shareUrl,
   shareTitle,
   shareLabel,
@@ -15,6 +16,8 @@ export function StageActions({
 }: {
   /** Catalog id, for the download and share counts. */
   creator: string
+  /** Extra details for those counts, e.g. { mode: 'set' }. Never what visitors typed. */
+  eventData?: Record<string, string>
   /** Builds the link when the button is pressed. */
   shareUrl: () => string
   shareTitle: string
@@ -25,7 +28,7 @@ export function StageActions({
 }) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const share = async () => {
-    track('share', { creator })
+    track('share', { creator, ...eventData })
     const result = await shareLink(shareUrl(), shareTitle)
     if (result === 'shared') return
     setState(result)
@@ -43,7 +46,7 @@ export function StageActions({
         onClick={() => {
           if (!stl) return
           downloadStl(stl, fileName)
-          track('download', { creator })
+          track('download', { creator, ...eventData })
         }}
         disabled={!stl || busy}
       >

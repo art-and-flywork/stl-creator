@@ -1,19 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Choice,
-  DownloadIcon,
   MoreCreators,
-  downloadStl,
   Renderer,
   Section,
-  ShareIcon,
-  shareLink,
   SheetDialog,
+  StageActions,
   Slider,
   StatusLine,
   Superseded,
   Toggle,
-  track,
   Viewer,
   type RenderStatus,
 } from '@stl-creator/stl-kit'
@@ -74,7 +70,6 @@ export default function App() {
   const [fontChoice, setFontChoice] = useState<FontChoice>(shared?.font ?? stored.font)
   const [sharedNotice, setSharedNotice] = useState(shared !== null)
   const undoTo = useRef(stored)
-  const [shareState, setShareState] = useState<'idle' | 'copied' | 'failed'>('idle')
 
   useEffect(() => {
     if (shared) clearSharedSet()
@@ -181,14 +176,6 @@ export default function App() {
     return () => clearTimeout(timer)
   }, [params, mode, font, fontStatus])
 
-  const share = async () => {
-    track('share', { creator: 'keycaps', mode })
-    const result = await shareLink(shareUrl({ mode, params, font: fontChoice }), 'Keycap set')
-    if (result === 'shared') return
-    setShareState(result)
-    setTimeout(() => setShareState('idle'), 2000)
-  }
-
   const undoShared = () => {
     setParams(undoTo.current.params)
     setMode(undoTo.current.mode)
@@ -196,11 +183,7 @@ export default function App() {
     setSharedNotice(false)
   }
 
-  const download = () => {
-    if (!model) return
-    downloadStl(model.stl, fileName(params, model.mode))
-    track('download', { creator: 'keycaps', mode: model.mode })
-  }
+
 
   const legendFont = font ? `"${font.cssFamily}", monospace` : undefined
   const editRow = mode === 'key' ? params.row : setRow
@@ -390,16 +373,16 @@ export default function App() {
             </button>
           </div>
         )}
-        <div className="stage-actions">
-          <button type="button" className="keycap-button share" onClick={share} aria-live="polite">
-            <ShareIcon />
-            {shareState === 'copied' ? 'Link copied' : shareState === 'failed' ? 'Copy the link' : 'Share this set'}
-          </button>
-          <button type="button" className="keycap-button download" onClick={download} disabled={!stl || busy}>
-            <DownloadIcon />
-            Download {fileName(params, model?.mode ?? mode)}
-          </button>
-        </div>
+        <StageActions
+          creator="keycaps"
+          eventData={{ mode: model?.mode ?? mode }}
+          shareUrl={() => shareUrl({ mode, params, font: fontChoice })}
+          shareTitle="Keycap set"
+          shareLabel="Share this set"
+          stl={stl}
+          fileName={fileName(params, model?.mode ?? mode)}
+          busy={busy}
+        />
       </main>
       <Info open={infoOpen} onClose={() => setInfoOpen(false)} />
       <SheetDialog open={legendsOpen} onClose={() => setLegendsOpen(false)} title="Legends" size="medium">
