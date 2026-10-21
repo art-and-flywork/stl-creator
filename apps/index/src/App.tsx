@@ -2,12 +2,9 @@ import { CREATORS, creatorUrl, searchCreators, type Creator } from '@stl-creator
 import { useMemo, useState } from 'react'
 import './App.css'
 
-// In production, only creators that have an address are listed.
-const LISTED = CREATORS.filter((c) => creatorUrl(c) !== null)
-
 export default function App() {
   const [query, setQuery] = useState('')
-  const found = useMemo(() => searchCreators(LISTED, query), [query])
+  const found = useMemo(() => searchCreators(CREATORS, query), [query])
   const searching = query.trim() !== ''
 
   return (
@@ -30,7 +27,7 @@ export default function App() {
             onChange={(e) => setQuery(e.target.value)}
           />
           <p className="count" aria-live="polite">
-            {searching ? `${found.length} of ${LISTED.length} creators` : `${LISTED.length} creators`}
+            {searching ? `${found.length} of ${CREATORS.length} creators` : `${CREATORS.length} creators`}
           </p>
         </div>
 
@@ -63,7 +60,7 @@ export default function App() {
 function CreatorTile({ creator }: { creator: Creator }) {
   return (
     <li>
-      <a className="tile" href={creatorUrl(creator)!}>
+      <a className="tile" href={creatorUrl(creator)}>
         <img src={creator.image} alt="" width={800} height={600} />
         <span className="name">{creator.name}</span>
         <span className="tagline">{creator.tagline}</span>

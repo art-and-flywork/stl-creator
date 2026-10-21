@@ -1,9 +1,69 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "index", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "index", "dev", "--port", "5170", "--strictPort"], "port": 5170 },
-    { "name": "keycaps", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "keycaps", "dev", "--port", "5171", "--strictPort"], "port": 5171 },
-    { "name": "vase", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "vase", "dev", "--port", "5172", "--strictPort"], "port": 5172 },
-    { "name": "keychain", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "keychain", "dev", "--port", "5173", "--strictPort"], "port": 5173 }
+    {
+      "name": "index",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "index",
+        "dev",
+        "--port",
+        "5170",
+        "--strictPort"
+      ],
+      "port": 5170
+    },
+    {
+      "name": "keycaps",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "keycaps",
+        "dev",
+        "--port",
+        "5171",
+        "--strictPort"
+      ],
+      "port": 5171
+    },
+    {
+      "name": "vase",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "vase",
+        "dev",
+        "--port",
+        "5172",
+        "--strictPort"
+      ],
+      "port": 5172
+    },
+    {
+      "name": "keychain",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "keychain",
+        "dev",
+        "--port",
+        "5173",
+        "--strictPort"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5180",
+        "--directory",
+        "site"
+      ],
+      "port": 5180
+    }
   ]
 }

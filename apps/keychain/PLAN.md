@@ -17,4 +17,4 @@ for a key ring. Live 3D preview, STL download, share link.
 
 - [ ] Two-colour print: letters as a separate STL for a filament swap.
 - [ ] More than one line of text.
-- [ ] Deploy as its own Vercel project; add its address to the catalog.
+- [x] Served at `/keychain/` on the combined site.

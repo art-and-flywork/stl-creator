@@ -2,25 +2,27 @@ import { describe, expect, it } from 'vitest'
 import { CREATORS, creatorUrl, indexUrl, searchCreators } from './catalog'
 
 describe('creatorUrl', () => {
-  const vase = { devPort: 5172, url: null }
+  const vase = { devPort: 5172, path: '/vase/' }
 
   it('points at the local dev server during development', () => {
-    expect(creatorUrl(vase, true)).toBe('http://localhost:5172/')
+    expect(creatorUrl(vase, true)).toBe('http://localhost:5172/vase/')
   })
 
-  it('has no link in production until the creator has an address', () => {
-    expect(creatorUrl(vase, false)).toBeNull()
-  })
-
-  it('uses the production address when there is one', () => {
-    expect(creatorUrl({ devPort: 5171, url: 'https://example.com/' }, false)).toBe('https://example.com/')
+  it('is a path on the same site in production', () => {
+    expect(creatorUrl(vase, false)).toBe('/vase/')
   })
 })
 
 describe('indexUrl', () => {
-  it('is local during development and absent in production for now', () => {
+  it('is local during development and the site root in production', () => {
     expect(indexUrl(true)).toBe('http://localhost:5170/')
-    expect(indexUrl(false)).toBeNull()
+    expect(indexUrl(false)).toBe('/')
+  })
+})
+
+describe('CREATORS', () => {
+  it('each live under their own path on the site', () => {
+    expect(CREATORS.map((c) => c.path).sort()).toEqual(['/keycaps/', '/keychain/', '/vase/'])
   })
 })
 

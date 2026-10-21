@@ -8,7 +8,6 @@
 
 ## Next
 
-- [ ] Give the index an address (domain still open) and set `INDEX.url` in
-      the catalog, so the "More creators" links show up in production.
-- [ ] Add the vase and keychain addresses to the catalog once deployed.
+- [x] Deployed as the root of the stl-creator Vercel project; the
+      creators are paths on the same site.
 - [ ] A filter, once it is clear along which line visitors sort.

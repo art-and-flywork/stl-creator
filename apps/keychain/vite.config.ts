@@ -4,6 +4,8 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // its path on the combined site (see the catalog in packages/stl-kit)
+  base: '/keychain/',
   server: { port: 5173, strictPort: true },
   // the kit is linked from packages/; keep one copy of these
   resolve: { dedupe: ['react', 'react-dom', 'three', '@react-three/fiber'] },

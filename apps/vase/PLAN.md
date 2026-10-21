@@ -10,12 +10,11 @@ out or pinch in. Live 3D preview, STL download, share link.
       and rim; even wall via a 2D offset; closed base, open rim.
 - [x] App on the stl-kit: live render (~0.3 s), up to 8 bulges, settings in
       localStorage (`vase-stl:params`), share link (`#vase=`), download.
-- [x] "More creators" link (hidden in production until the index has an
-      address).
+- [x] "More creators" link to the index; served at `/vase/` on the
+      combined site.
 
 ## Ideas
 
 - [ ] A side-view diagram of the profile in the panel, like the keycaps
       row profile.
 - [ ] Vase mode (single wall, spiralized) as an export option.
-- [ ] Deploy as its own Vercel project; add its address to the catalog.

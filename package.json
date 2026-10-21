@@ -7,7 +7,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "test:models": "scripts/check-models.sh"
+    "test:models": "scripts/check-models.sh",
+    "build:site": "turbo run build && node scripts/assemble-site.mjs"
   },
   "devDependencies": {
     "turbo": "^2.11.9"

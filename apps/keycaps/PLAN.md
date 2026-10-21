@@ -127,9 +127,9 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
 ### 5. Deploy
 - [x] Deployed to Vercel (team artandflywork, project keycap-stl), so far
       with `vercel deploy` from a local checkout.
-- [ ] Deploy from this monorepo on push: Vercel project with Root Directory
-      `apps/keycaps`, `npx turbo-ignore` as Ignored Build
-      Step; domain keycaps-stl.artandflywork.com.
+- [x] Deploy from this monorepo on push: part of the stl-creator Vercel
+      project, served at `/keycaps/` (Vite `base`).
+- [ ] Redirect keycap-stl.vercel.app to `/keycaps/` on the stl-creator site.
 
 ## Open decisions
 

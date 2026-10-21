@@ -9,7 +9,6 @@ Nothing is uploaded; everything runs on your own computer.
 apps/
   index/      The front page: every creator, with a search box.   :5170
   keycaps/    Keycaps for the Sofle split keyboard, based on DCS.  :5171
-              Live: keycap-stl.vercel.app
   vase/       A vase with any number of bulges in the wall.        :5172
   keychain/   A name on a tag with a ring, in any Google font.     :5173
 packages/
@@ -26,6 +25,8 @@ models/
 scripts/
   smoke-render.sh   Render a model with native OpenSCAD, fail on errors.
   thumbnails.sh     Render the index thumbnails (OpenSCAD + ImageMagick).
+  check-models.sh   Edge-case renders of every model (`pnpm test:models`).
+  assemble-site.mjs Combine the built apps into one site (`pnpm build:site`).
 ```
 
 The numbers are each app's fixed dev port; the creator catalog links to
@@ -53,16 +54,28 @@ pnpm test                   # Vitest in the kit and the creators
 
 ## Deployment
 
-Each app is its own Vercel project (team artandflywork), connected to this
-repository with its own Root Directory:
+All apps are one site: Vercel project **stl-creator** (team artandflywork),
+connected to this repository, Root Directory the repo root. `vercel.json`
+holds the settings: `pnpm build:site` builds every app and
+`scripts/assemble-site.mjs` copies them into `site/`:
 
-| App | Vercel project | Root Directory | Domain |
-| --- | --- | --- | --- |
-| `apps/keycaps` | keycap-stl | `apps/keycaps` | keycaps-stl.artandflywork.com |
+| Path | App |
+| --- | --- |
+| `/` | `apps/index` |
+| `/keycaps/` | `apps/keycaps` |
+| `/vase/` | `apps/vase` |
+| `/keychain/` | `apps/keychain` |
 
-Settings for the Vite apps: framework preset Vite, build command
-`turbo build`, output directory `dist`, Ignored Build Step
-`npx turbo-ignore` (a push only rebuilds the apps it changed).
+Each creator's path is its Vite `base` and its `path` in the catalog
+(`packages/stl-kit/src/catalog/catalog.ts`). Try the combined site locally:
+
+```bash
+pnpm build:site && python3 -m http.server 5180 --directory site
+```
+
+The older keycap-stl project (keycap-stl.vercel.app) was deployed by hand
+from the separate repo; point it at `/keycaps/` on this site once the
+domain is set.
 
 ## License
 

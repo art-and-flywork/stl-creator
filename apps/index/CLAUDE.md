@@ -7,7 +7,6 @@ owner doesn't know yet along which line visitors would sort).
 - Creators, taglines, search words and addresses live in the catalog
   (`packages/stl-kit/src/catalog/catalog.ts`), not here. Thumbnails come
   from `scripts/thumbnails.sh`.
-- In production only creators with an address are listed.
 - Import from `@stl-creator/stl-kit/catalog`, not the main entry, so
   three.js and OpenSCAD stay out of this bundle.
 - Visitors don't use CAD: plain words, no jargon.
