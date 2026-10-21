@@ -182,13 +182,6 @@ export function Info({ open, onClose }: Props) {
 function MadeWith() {
   return (
     <dl className="credits">
-      <dt>
-        <Ext href="https://github.com/rsheldiii/KeyV2">KeyV2</Ext>
-      </dt>
-      <dd>
-        The parametric OpenSCAD keycap library by rsheldiii, which inspired this keycap model. The model itself is
-        written from scratch by Art &amp; Flywork.
-      </dd>
       <dt>DCS by Signature Plastics</dt>
       <dd>The sculpted profile the shape starts from.</dd>
       <dt>

@@ -47,8 +47,8 @@ three.js viewer (react-three-fiber) · download button
   `main()` only runs once per WASM instance, so each render creates a fresh
   instance (~20 ms) inside one long-lived worker. Latest request wins; a
   render that has run over 800 ms is cancelled with `worker.terminate()`.
-  Every render passes `$fs=0.4` and `$shape_facets=12` (KeyV2 defaults 0.1
-  and 30): half the triangles and render time, no visible difference.
+  Every render passes `$fs=0.4` and `$shape_facets=12`: fewer triangles
+  and faster renders, no visible difference.
 - **Fonts:** Google Fonts via Fontsource: the family list from
   `api.fontsource.org`, static TTFs from jsDelivr (both CORS-enabled; the
   Google CSS API serves WOFF2). The TTF goes to `/fonts/` with a minimal

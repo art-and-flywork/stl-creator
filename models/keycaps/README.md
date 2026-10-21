@@ -3,9 +3,7 @@
 ![The full Sofle set](images/sofle-set.png)
 
 OpenSCAD model for a custom keycap profile, with a complete set for the
-Sofle split keyboard. The shape takes its ideas from
-[KeyV2](https://github.com/rsheldiii/KeyV2) by rsheldiii; the code is
-written from scratch for stl-creator.
+Sofle split keyboard, written by Art & Flywork for stl-creator.
 
 The keycap profile is a modification of DCS by Signature Plastics. The main
 changes are the row heights and angles, and the bevelled top edges.
