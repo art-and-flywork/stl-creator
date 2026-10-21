@@ -12,4 +12,5 @@ ring into the text, so the ring stays attached whatever the first letter is.
 | `border` | tag margin around the letters, mm |
 | `hole`, `hole_side` | ring on/off; `"left"`, `"right"` or `"top"` |
 
-GPL-3.0, like the rest of stl-creator.
+© Art & Flywork, CC BY-NC 4.0: free for personal use, commercial use needs a
+license. See [`../LICENSE.md`](../LICENSE.md).

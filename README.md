@@ -91,4 +91,8 @@ development, and only counts visits on stl-creator.app. The code is in
 
 ## License
 
-GPL-3.0, like OpenSCAD and the models. See [LICENSE.md](LICENSE.md).
+- **Models and the STLs made with them** (`models/`): © Art & Flywork,
+  CC BY-NC 4.0. Free for personal use; commercial use needs a license. See
+  [models/LICENSE.md](models/LICENSE.md).
+- **App code** (`apps/`, `packages/`, `scripts/`): GPL-3.0, because the apps
+  include OpenSCAD. See [LICENSE.md](LICENSE.md).

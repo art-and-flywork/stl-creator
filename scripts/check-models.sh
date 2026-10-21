@@ -22,3 +22,13 @@ $s models/keychain/keychain.scad -D 'name=""'
 $s models/keychain/keychain.scad -D 'hole_side="top"' -D 'name="anna"'
 $s models/keychain/keychain.scad -D 'hole_side="right"' -D 'name="LAVA"'
 $s models/keychain/keychain.scad -D hole=false
+
+$s models/keycaps/key.scad
+$s models/keycaps/key.scad -D 'legend_text=""' -D 'bump="on"'
+$s models/keycaps/key.scad -D row=0 -D 'legend_text="ESC"'
+$s models/keycaps/key.scad -D row=4 -D length=1.5 -D roll=10
+$s models/keycaps/key.scad -D stem_tines=false -D stem_slop=0
+$s models/keycaps/key.scad -D top_bevel=0
+# one piece per keycap: 6 + 6 + 6 + 7 + 5 on each half
+PIECES=30 $s models/keycaps/layouts/sofle.scad -D 'half="left"'
+PIECES=60 $s models/keycaps/layouts/sofle.scad

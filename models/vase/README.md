@@ -16,4 +16,5 @@ overshoots between two points.
 openscad --backend=manifold -o vase.stl -D 'bulges=[[40,30],[90,-25],[140,20]]' vase.scad
 ```
 
-GPL-3.0, like the rest of stl-creator.
+© Art & Flywork, CC BY-NC 4.0: free for personal use, commercial use needs a
+license. See [`../LICENSE.md`](../LICENSE.md).

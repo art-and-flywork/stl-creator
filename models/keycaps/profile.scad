@@ -37,34 +37,23 @@ function is_home(t) = len([for (h = home_keys) if (h == t) h]) > 0;
 // length: length in units (vertical), roll: sideways tilt in degrees
 // bump: homing bump, defaults to on for the keys in home_keys
 module custom_key(t, row, length = 1, roll = 0, bump = undef) {
-  let(
-    // base dimensions from DCS
-    $bottom_key_width   = 18.16,
-    $bottom_key_height  = 18.16,
-    $width_difference   = 6,
-    $height_difference  = 4,
-    $dish_type          = "cylindrical",
-    $dish_depth         = 0.5,
-    $dish_skew_x        = 0,
-    $dish_skew_y        = 0,
-
-    $stem_slop          = stem_slop,
-    $stem_support_type  = stem_tines ? "tines" : "disable",
-    $stem_support_height     = stem_tine_height,
-    $stem_support_tine_width = stem_tine_width,
+  keycap(
+    legend      = t,
+    font_size   = legend_size(t, row),
+    length      = length,
     // tilting sideways lowers one side; compensate the height
-    $total_depth        = heights[row] + 6 * sin(abs(roll)),
-    $top_tilt           = tilts[row],
-    $top_skew           = skews[row],
-    $key_height         = length,
-    $double_sculpted    = roll != 0,
-    $top_tilt_y         = roll,
-    $key_bump           = is_undef(bump) ? is_home(t) : bump,
-    $key_bump_depth     = bump_depth,
-    $key_bump_edge      = bump_edge,
-    $font_size          = legend_size(t, row),
-    $inset_legend_depth = 0.6,
-    $top_bevel          = top_bevel,
-    $top_bevel_steps    = top_bevel_steps
-  ) legend(t) key();
+    height      = heights[row] + 6 * sin(abs(roll)),
+    tilt        = tilts[row],
+    skew        = skews[row],
+    roll        = roll,
+    bump        = is_undef(bump) ? is_home(t) : bump,
+    bump_depth  = bump_depth,
+    bump_edge   = bump_edge,
+    bevel       = top_bevel,
+    bevel_steps = top_bevel_steps,
+    slop        = stem_slop,
+    tines       = stem_tines,
+    tine_width  = stem_tine_width,
+    tine_height = stem_tine_height
+  );
 }
