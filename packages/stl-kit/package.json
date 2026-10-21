@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./scad": "./src/scad.ts",
+    "./catalog": "./src/catalog/catalog.ts",
     "./worker": "./src/render/worker.ts",
     "./fonts": "./src/fonts/index.ts",
     "./styles/base.css": "./src/styles/base.css",

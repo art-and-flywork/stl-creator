@@ -1,3 +1,7 @@
+import keycapsImage from './images/keycaps.png'
+import keychainImage from './images/keychain.png'
+import vaseImage from './images/vase.png'
+
 // Every creator in this repo, for the index page and the "more creators"
 // links. One place for names, search words and addresses.
 
@@ -11,7 +15,7 @@ export interface Creator {
   devPort: number
   /** Production address; null until the app is deployed. */
   url: string | null
-  /** Thumbnail URL. */
+  /** Thumbnail URL (made by scripts/thumbnails.sh). */
   image: string
 }
 
@@ -23,7 +27,7 @@ export const CREATORS: Creator[] = [
     keywords: ['vase', 'flowers', 'pot', 'plant', 'home', 'decoration'],
     devPort: 5172,
     url: null,
-    image: '',
+    image: vaseImage,
   },
   {
     id: 'keychain',
@@ -32,7 +36,7 @@ export const CREATORS: Creator[] = [
     keywords: ['keychain', 'name', 'tag', 'label', 'text', 'gift'],
     devPort: 5173,
     url: null,
-    image: '',
+    image: keychainImage,
   },
   {
     id: 'keycaps',
@@ -41,7 +45,7 @@ export const CREATORS: Creator[] = [
     keywords: ['keycaps', 'keyboard', 'mechanical', 'sofle', 'legend'],
     devPort: 5171,
     url: 'https://keycap-stl.vercel.app/',
-    image: '',
+    image: keycapsImage,
   },
 ]
 
