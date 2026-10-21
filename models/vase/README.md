@@ -1,0 +1,17 @@
+# Vase
+
+A turned vase with an even wall, a closed base and an open rim, shaped by a
+smooth curve through the base, any number of bulges and the rim.
+
+| Variable | Meaning (mm) |
+| --- | --- |
+| `height` | outer height |
+| `bottom_radius`, `top_radius` | outer radius at base and rim |
+| `wall` | wall and base thickness |
+| `bulges` | `[[height, amount], ...]`, sorted by height; amount > 0 bulges out, < 0 pinches in |
+
+```bash
+openscad --backend=manifold -o vase.stl -D 'bulges=[[40,30],[90,-25],[140,20]]' vase.scad
+```
+
+GPL-3.0, like the rest of stl-creator.
