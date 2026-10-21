@@ -22,6 +22,9 @@ app has its own `CLAUDE.md` and `PLAN.md`.
   `@stl-creator/stl-kit/scad`, never the main entry (that pulls React and
   three.js into the worker).
 - Visitors don't use CAD: plain words and mm in the UI, no OpenSCAD jargon.
+- Button shapes: choices (segmented controls like Single key / Sofle set)
+  are rounded; action buttons (Add bulge, Make something else) have square
+  corners.
 - Analytics (Umami, cookie-free): count actions with `track(event, { creator })`
   from the kit. Never send what visitors type (names, legends).
 - Docs and comments in English.
