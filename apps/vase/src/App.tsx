@@ -86,6 +86,13 @@ export default function App() {
             <Slider label="Bottom radius" value={params.bottom_radius} range={RANGES.radius} onChange={(v) => set('bottom_radius', v)} />
             <Slider label="Upper radius" value={params.top_radius} range={RANGES.radius} hint="at the rim" onChange={(v) => set('top_radius', v)} />
             <Slider label="Wall thickness" value={params.wall} range={RANGES.wall} hint="the bottom is just as thick" onChange={(v) => set('wall', v)} />
+            <Slider
+              label="Sides"
+              value={params.sides}
+              range={RANGES.sides}
+              hint="how round the vase is — more sides for a smoother print, larger file"
+              onChange={(v) => set('sides', v)}
+            />
           </Section>
 
           <Section title="Shell curve">

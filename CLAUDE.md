@@ -34,7 +34,7 @@ app has its own `CLAUDE.md` and `PLAN.md`.
   outside projects into `models/`. App code is GPL-3.0 because it bundles
   OpenSCAD.
 - Button shapes: choices (segmented controls like Single key / Sofle set)
-  are rounded; action buttons (Add bulge, Make something else) have square
+  are rounded; action buttons (Add bulge, Back to all models) have square
   corners.
 - Analytics (Umami, cookie-free): count actions with `track(event, { creator })`
   from the kit. Never send what visitors type (names, legends).

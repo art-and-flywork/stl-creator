@@ -23,7 +23,7 @@ export function Info({ open, onClose }: { open: boolean; onClose: () => void }) 
       open={open}
       onClose={onClose}
       title="About the vase"
-      lead="Shape a vase with a few sliders: its height, the width at the bottom and the rim, the wall thickness, and bulges that push the wall out or pull it in. Then download the STL for your slicer."
+      lead="Shape a vase with a few sliders: its height, the width at the bottom and the rim, the wall thickness, how many sides it has (for roundness), and bulges that push the wall out or pull it in. Then download the STL for your slicer."
       sections={[
         {
           id: 'print-tips',
@@ -45,6 +45,10 @@ export function Info({ open, onClose }: { open: boolean; onClose: () => void }) 
               <li>
                 <strong>Big vases</strong> benefit from a brim, so the base stays flat on the plate while the print is
                 tall.
+              </li>
+              <li>
+                <strong>Sides.</strong> The default (96) is fine for most prints. Raise it toward 200–300 if you want a
+                smoother rim and wall; the file gets larger and the preview can take a bit longer.
               </li>
             </ul>
           ),

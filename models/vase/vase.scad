@@ -6,12 +6,15 @@ height = 160;
 bottom_radius = 35;
 top_radius = 45;
 wall = 2; // wall thickness, also the base thickness
+// How many sides the turned shape has. More sides = rounder wall and a
+// larger STL; 96 is fine for most FDM prints, up to ~300 for a smoother rim.
+sides = 96;
 // Bulges in the wall, sorted by height: [height, amount]. A positive amount
 // bulges out, a negative one pinches in, measured from the straight line
 // between base and rim.
 bulges = [[60, 15]];
 
-$fn = 96;
+$fn = sides;
 
 samples = 24; // curve points per segment between two control points
 min_radius = wall + 3; // keeps the inside open where the wall pinches in

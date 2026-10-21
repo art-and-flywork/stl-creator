@@ -9,10 +9,11 @@ export interface Params {
   bottom_radius: number
   top_radius: number
   wall: number
+  sides: number
   bulges: Bulge[]
 }
 
-const SETTINGS = ['height', 'bottom_radius', 'top_radius', 'wall', 'bulges'] as const
+const SETTINGS = ['height', 'bottom_radius', 'top_radius', 'wall', 'sides', 'bulges'] as const
 
 /** Defaults read from vase.scad itself (only the settings, not its internals). */
 export const DEFAULTS = Object.fromEntries(
@@ -23,6 +24,8 @@ export const RANGES = {
   height: { min: 40, max: 250, step: 1, unit: 'mm' },
   radius: { min: 10, max: 95, step: 0.5, unit: 'mm' },
   wall: { min: 0.8, max: 6, step: 0.1, unit: 'mm' },
+  /** Around the vase; ~96 default, up to 300 for a very smooth print. */
+  sides: { min: 4, max: 300, step: 1, unit: '' },
   amount: { min: -40, max: 40, step: 0.5, unit: 'mm' },
 } satisfies Record<string, Range>
 

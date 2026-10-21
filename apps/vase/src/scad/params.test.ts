@@ -3,7 +3,14 @@ import { DEFAULTS, nextBulge, normalizeBulges, toDefines } from './params'
 
 describe('DEFAULTS', () => {
   it('come from vase.scad', () => {
-    expect(DEFAULTS).toEqual({ height: 160, bottom_radius: 35, top_radius: 45, wall: 2, bulges: [[60, 15]] })
+    expect(DEFAULTS).toEqual({
+      height: 160,
+      bottom_radius: 35,
+      top_radius: 45,
+      wall: 2,
+      sides: 96,
+      bulges: [[60, 15]],
+    })
   })
 })
 
@@ -37,6 +44,7 @@ describe('toDefines', () => {
       'bottom_radius=35',
       'top_radius=45',
       'wall=2',
+      'sides=96',
       'bulges=[[152, 15]]',
     ])
   })
