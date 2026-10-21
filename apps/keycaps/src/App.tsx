@@ -340,7 +340,7 @@ export default function App() {
             Reset all settings
           </button>
         </div>
-        <MadeBy />
+        <MadeBy creator="keycaps" />
       </aside>
 
       <main className="stage">

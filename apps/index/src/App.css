@@ -77,6 +77,13 @@
   text-underline-offset: 3px;
 }
 
+.made-by .support {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
 /* ---------- cutting mat ---------- */
 
 .mat {

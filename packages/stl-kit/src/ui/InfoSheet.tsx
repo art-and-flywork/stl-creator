@@ -1,4 +1,5 @@
 import { useCallback, useRef, type MouseEvent, type ReactNode } from 'react'
+import { SupportLink } from '../catalog/support'
 import { SheetDialog } from './SheetDialog'
 import './InfoSheet.css'
 
@@ -130,7 +131,8 @@ export function usageSection(): InfoSection {
         <ul>
           <li>
             <strong>Personal use is free.</strong> Print the STL, give the result away, share your design. Please
-            mention Art &amp; Flywork when you share it.
+            mention Art &amp; Flywork when you share it. If you like it, you can{' '}
+            <SupportLink from="info">buy me a coffee</SupportLink>.
           </li>
           <li>
             <strong>Commercial use needs a license.</strong> Selling prints, or using the STL in a product or service,

@@ -130,7 +130,7 @@ export default function App() {
             Reset all settings
           </button>
         </div>
-        <MadeBy />
+        <MadeBy creator="vase" />
       </aside>
 
       <main className="stage">

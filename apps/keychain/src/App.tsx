@@ -176,7 +176,7 @@ export default function App() {
             Reset all settings
           </button>
         </div>
-        <MadeBy />
+        <MadeBy creator="keychain" />
       </aside>
 
       <main className="stage">

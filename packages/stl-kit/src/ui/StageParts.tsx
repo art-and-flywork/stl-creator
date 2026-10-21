@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { track } from '../analytics'
+import { SupportLink } from '../catalog/support'
 import { shareLink, downloadStl } from './actions'
 import { DownloadIcon, ShareIcon } from './icons'
 
@@ -27,6 +28,7 @@ export function StageActions({
   busy: boolean
 }) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
+  const [thanks, setThanks] = useState(false)
   const share = async () => {
     track('share', { creator, ...eventData })
     const result = await shareLink(shareUrl(), shareTitle)
@@ -35,6 +37,20 @@ export function StageActions({
     setTimeout(() => setState('idle'), 2000)
   }
   return (
+    <>
+    {thanks && (
+      <div className="thanks-notice" role="status">
+        <span>Enjoy your print! Free for personal use; if you like it, you can buy me a coffee.</span>
+        <SupportLink from="download" creator={creator} className="secondary">
+          ☕ Buy me a coffee
+        </SupportLink>
+        <button type="button" className="close-small" aria-label="Dismiss" onClick={() => setThanks(false)}>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 3l10 10M13 3L3 13" />
+          </svg>
+        </button>
+      </div>
+    )}
     <div className="stage-actions">
       <button type="button" className="keycap-button share" onClick={share} aria-live="polite">
         <ShareIcon />
@@ -47,6 +63,7 @@ export function StageActions({
           if (!stl) return
           downloadStl(stl, fileName)
           track('download', { creator, ...eventData })
+          setThanks(true)
         }}
         disabled={!stl || busy}
       >
@@ -54,6 +71,7 @@ export function StageActions({
         Download {fileName}
       </button>
     </div>
+    </>
   )
 }
 

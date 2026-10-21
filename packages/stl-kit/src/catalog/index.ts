@@ -2,3 +2,4 @@
 export * from './catalog'
 export { MadeBy } from './MadeBy'
 export { MoreCreators } from './MoreCreators'
+export { KOFI_URL, SupportLink } from './support'

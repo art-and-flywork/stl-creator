@@ -82,8 +82,9 @@ domain is set.
 ## Analytics
 
 Cookie-free usage stats with [Umami](https://umami.is): page views per path
-(so per creator), plus `download` and `share` events with the creator's id
-(keycaps also sends `key` or `set`). No names, legends or other input are
+(so per creator), plus `download`, `share` and `support` (Ko-fi clicks)
+events with the creator's id (keycaps also sends `key` or `set`; `support`
+also says where the link was: `download`, `footer` or `info`). No names, legends or other input are
 sent. It is off until the Vercel environment variable
 `VITE_UMAMI_WEBSITE_ID` is set (then redeploy), never loads during
 development, and only counts visits on stl-creator.app. The code is in

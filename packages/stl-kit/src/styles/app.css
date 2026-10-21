@@ -611,3 +611,52 @@
   font-weight: 600;
   text-underline-offset: 3px;
 }
+
+/* ---------- Ko-fi ---------- */
+
+.made-by .support {
+  display: inline-block;
+  margin-left: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.made-by .support:hover {
+  color: var(--ink);
+}
+
+/* thank-you after a download, just above the buttons */
+.thanks-notice {
+  position: absolute;
+  right: 16px;
+  bottom: 96px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 10px 10px 10px 16px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+.thanks-notice .secondary {
+  flex: none;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.thanks-notice .secondary:hover {
+  color: var(--paper);
+}
+
+@media (max-width: 760px) {
+  .thanks-notice {
+    flex-wrap: wrap;
+    left: 12px;
+    right: 12px;
+    bottom: 80px;
+  }
+}
