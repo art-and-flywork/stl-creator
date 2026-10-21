@@ -36,6 +36,17 @@ export function toDefines(params: Params, font?: string): string[] {
   return defines
 }
 
+/**
+ * Why there is nothing to print, or null. Without a ring the tag is only
+ * the letters, and those need a name and a loaded font.
+ */
+export function nothingToMake(params: Params, fontLoaded: boolean): string | null {
+  if (params.hole) return null
+  if (!params.name.trim()) return 'Type a name, or turn on the key ring hole, to make a keychain.'
+  if (!fontLoaded) return 'The font could not be loaded, so there are no letters to print. Check your connection or pick another font.'
+  return null
+}
+
 /** Download name: the name in plain letters, e.g. "Robin-keychain.stl". */
 export function fileName(name: string): string {
   const safe = name

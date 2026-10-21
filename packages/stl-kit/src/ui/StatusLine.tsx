@@ -4,8 +4,19 @@ export type RenderStatus =
   | { kind: 'done'; ms: number; triangles: number; warnings: string[] }
   | { kind: 'error'; message: string; logs: string[] }
 
-/** Render progress, timing and warnings under the 3D view. */
-export function StatusLine({ status, hasModel }: { status: RenderStatus; hasModel: boolean }) {
+/**
+ * Render progress, timing and warnings under the 3D view. OpenSCAD's own
+ * error output only shows during development (`dev`); visitors get plain words.
+ */
+export function StatusLine({
+  status,
+  hasModel,
+  dev = import.meta.env.DEV,
+}: {
+  status: RenderStatus
+  hasModel: boolean
+  dev?: boolean
+}) {
   if (status.kind === 'idle') return <Loader label="Loading OpenSCAD" expectedMs={2000} big />
   if (status.kind === 'rendering')
     return (
@@ -19,8 +30,14 @@ export function StatusLine({ status, hasModel }: { status: RenderStatus; hasMode
   if (status.kind === 'error')
     return (
       <div className="status error" role="alert">
-        <strong>Render failed: {status.message}</strong>
-        {status.logs.length > 0 && <pre>{status.logs.slice(-8).join('\n')}</pre>}
+        <strong>The model could not be made with these settings. Try changing the last one back.</strong>
+        {dev && (
+          <pre>
+            {status.message}
+            {'\n'}
+            {status.logs.slice(-8).join('\n')}
+          </pre>
+        )}
       </div>
     )
   return (

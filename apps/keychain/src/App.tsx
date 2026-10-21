@@ -27,6 +27,7 @@ import {
   FONT_KEY,
   loadParams,
   MAX_NAME_LENGTH,
+  nothingToMake,
   RANGES,
   saveParams,
   toDefines,
@@ -87,13 +88,15 @@ export default function App() {
   }, [fontChoice, fontKey])
 
   const defines = useMemo(() => toDefines(params, font?.scadName), [params, font])
+  // OpenSCAD fails on an empty model; say what to do instead of rendering
+  const nothing = fontStatus === 'loading' ? null : nothingToMake(params, fontStatus === 'ready')
   const warnings = useMemo(() => (fontStatus === 'error' ? [NO_FONT] : []), [fontStatus])
   const { stl, status, busy } = useLiveRender({
     spawnWorker,
     file: MODEL_FILE,
     defines,
     font: font?.bytes,
-    ready: fontStatus !== 'loading',
+    ready: fontStatus !== 'loading' && nothing === null,
     label: 'Making your keychain',
     warnings,
   })
@@ -168,8 +171,14 @@ export default function App() {
       </aside>
 
       <main className="stage">
-        <Viewer stl={stl} frameKey={`${Math.round(params.text_size / 5)}-${Math.round(params.name.length / 5)}-${params.hole_side}`} />
-        <StatusLine status={status} hasModel={stl !== null} />
+        <Viewer stl={nothing ? null : stl} frameKey={`${Math.round(params.text_size / 5)}-${Math.round(params.name.length / 5)}-${params.hole_side}`} />
+        {nothing ? (
+          <div className="status" role="status">
+            {nothing}
+          </div>
+        ) : (
+          <StatusLine status={status} hasModel={stl !== null} />
+        )}
         {sharedNotice && (
           <SharedNotice
             text="You opened a shared keychain. It replaced your own settings."
@@ -185,7 +194,7 @@ export default function App() {
           shareUrl={() => shareUrl({ params, font: fontChoice })}
           shareTitle="My keychain"
           shareLabel="Share this keychain"
-          stl={stl}
+          stl={nothing ? null : stl}
           fileName={fileName(params.name)}
           busy={busy}
         />

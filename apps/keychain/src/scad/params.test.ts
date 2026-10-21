@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULTS, fileName, toDefines } from './params'
+import { DEFAULTS, fileName, nothingToMake, toDefines } from './params'
 
 describe('DEFAULTS', () => {
   it('come from keychain.scad', () => {
@@ -32,5 +32,20 @@ describe('fileName', () => {
     expect(fileName('Robin')).toBe('Robin-keychain.stl')
     expect(fileName('Ané & co')).toBe('Ane-co-keychain.stl')
     expect(fileName('  ')).toBe('keychain.stl')
+  })
+})
+
+describe('nothingToMake', () => {
+  it('says so when there is no name and no ring', () => {
+    expect(nothingToMake({ ...DEFAULTS, name: '  ', hole: false }, true)).toMatch(/type a name/i)
+  })
+
+  it('says so when the font is missing and there is no ring', () => {
+    expect(nothingToMake({ ...DEFAULTS, hole: false }, false)).toMatch(/font/i)
+  })
+
+  it('is fine with a name, or with just a ring', () => {
+    expect(nothingToMake(DEFAULTS, true)).toBeNull()
+    expect(nothingToMake({ ...DEFAULTS, name: '' }, true)).toBeNull()
   })
 })
