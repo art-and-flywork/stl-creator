@@ -78,8 +78,8 @@
 }
 
 .made-by .support {
-  display: block;
-  margin-top: 6px;
+  display: inline-block;
+  margin-left: 12px;
   color: var(--muted);
   font-weight: 400;
 }

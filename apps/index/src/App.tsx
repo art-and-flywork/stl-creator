@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div className="index">
       <header className="intro">
-        <h1>Make your own object</h1>
+        <h1>Create 3D-printable STLs on the fly</h1>
         <p>
           Pick a creator, move the sliders and download a file for your 3D printer. No CAD needed: everything runs
           in your browser, nothing is uploaded.
