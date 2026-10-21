@@ -17,7 +17,8 @@ const SECTIONS = [
   { id: 'how', title: 'How it works' },
   { id: 'profile', title: 'The profile' },
   { id: 'built-on', title: 'Built on' },
-  { id: 'printing', title: 'Printing' },
+  { id: 'print-tips', title: 'Print tips' },
+  { id: 'printing', title: 'Print settings' },
   { id: 'license', title: 'License' },
 ]
 
@@ -178,8 +179,37 @@ export function Info({ open, onClose }: Props) {
               </dl>
             </section>
 
+            <section id="print-tips">
+              <h2>Print tips</h2>
+              <p>
+                Keycaps are a hard print: a small part, a thin stem that has to stand on its own, and a sculpted top that
+                should come out smooth. This is what gives the best results so far:
+              </p>
+              <ul>
+                <li>
+                  <strong>A textured build plate.</strong> A Biqu Frost-bite plate holds the small footprint well and
+                  lets go once it has cooled.
+                </li>
+                <li>
+                  <strong>A 3 mm brim</strong>, so the keycap stays put on the plate. It peels off easily afterwards.
+                </li>
+                <li>
+                  <strong>A 0.25 mm nozzle</strong> for crisp legends and edges. Keep the stem tine width at or above
+                  the nozzle width (under Printing in the settings).
+                </li>
+                <li>
+                  <strong>Matte filament.</strong> It hides the layer lines on the curved top far better than glossy
+                  filament.
+                </li>
+              </ul>
+              <p>
+                <strong>Stem comes loose?</strong> Print with supports instead. Then turn off <em>Stem tines</em> under
+                Printing in the settings: the supports hold the stem, and tines would only get in the way.
+              </p>
+            </section>
+
             <section id="printing">
-              <h2>Printing</h2>
+              <h2>Print settings</h2>
               <ul>
                 <li>
                   <strong>Stem slop</strong> is the extra room in the stem hole. If keycaps are too tight on your
