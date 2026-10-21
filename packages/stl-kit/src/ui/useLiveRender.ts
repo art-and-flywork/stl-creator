@@ -38,7 +38,7 @@ export function useLiveRender({ spawnWorker, file, defines, font, ready = true, 
             kind: 'done',
             ms: result.ms,
             triangles: (result.stl.byteLength - 84) / 50,
-            warnings: [...JSON.parse(extra), ...result.logs.filter((l) => /^WARNING/.test(l))],
+            warnings: [...JSON.parse(extra), ...result.logs.filter((l) => l.startsWith('WARNING'))],
           })
         },
         (error: Error & { logs?: string[] }) => {
