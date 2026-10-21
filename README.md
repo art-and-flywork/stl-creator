@@ -54,7 +54,7 @@ pnpm test                   # Vitest in the kit and the creators
 
 ## Deployment
 
-Live: https://stl-creator-rosy.vercel.app (no own domain yet).
+Live: https://stl-creator.app (redirects to www.stl-creator.app).
 
 All apps are one site: Vercel project **stl-creator** (team artandflywork),
 connected to this repository, Root Directory the repo root. `vercel.json`

@@ -129,7 +129,8 @@ From `layouts/sofle.scad`: `left`, `right` (legend grids), `thumb_length`,
       with `vercel deploy` from a local checkout.
 - [x] Deploy from this monorepo on push: part of the stl-creator Vercel
       project, served at `/keycaps/` (Vite `base`).
-- [ ] Redirect keycap-stl.vercel.app to `/keycaps/` on the stl-creator site.
+- [ ] Redirect keycap-stl.vercel.app and keycaps-stl.dev to
+      https://stl-creator.app/keycaps/.
 
 ## Open decisions
 

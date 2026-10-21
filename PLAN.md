@@ -4,8 +4,9 @@
        `apps/keycaps` (history kept), its model as `models/keycaps`.
 2. [x] Vercel: one project, stl-creator (team artandflywork), serves every
        app as one site (index at `/`, creators under their own path).
-2a. [ ] A domain for stl-creator; redirect the old keycap-stl project to
-       `/keycaps/` on it.
+2a. [x] Domain: stl-creator.app (www.stl-creator.app).
+2b. [ ] Redirect the old keycap-stl project (keycap-stl.vercel.app,
+       keycaps-stl.dev) to https://stl-creator.app/keycaps/.
 3. [x] Creator index with search (`apps/index`), a vase creator
        (`apps/vase`) and a name keychain creator (`apps/keychain`); the
        shared STL-app kit is extracted into `packages/stl-kit`. See
