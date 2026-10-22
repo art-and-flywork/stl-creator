@@ -71,9 +71,9 @@ export default function App() {
       <aside className="panel">
         <header className="panel-head">
           <MoreCreators />
-          <h1>Vase</h1>
+          <h1>Custom vase</h1>
           <p>
-            Shape a vase with sliders, check it in 3D, download the file for your 3D printer.{' '}
+            Shape a 3D-printable vase with height, width, sides and bulges. Check it in 3D, download the STL.{' '}
             <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
               Print tips, FAQ &amp; license
             </button>

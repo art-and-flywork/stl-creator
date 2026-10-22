@@ -113,7 +113,7 @@ export default function App() {
           <MoreCreators />
           <h1>Name keychain</h1>
           <p>
-            Type a name, pick a font, download the file for your 3D printer.{' '}
+            Turn a name into a 3D-printable keychain tag. Pick a Google font, size and hole, then download the STL.{' '}
             <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
               Print tips, FAQ &amp; license
             </button>

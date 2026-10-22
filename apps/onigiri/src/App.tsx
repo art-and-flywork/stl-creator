@@ -72,10 +72,10 @@ export default function App() {
       <aside className="panel">
         <header className="panel-head">
           <MoreCreators />
-          <h1>Onigiri mold</h1>
+          <h1>Onigiri rice mold</h1>
           <p>
-            Make a rice mold: set the cavity size, height and corners, then download one file with base, ring and
-            press.{' '}
+            A three-part mold — base, ring and press — in one STL. Set diameter, height and corners, then download
+            and print.{' '}
             <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
               Print tips, FAQ &amp; license
             </button>

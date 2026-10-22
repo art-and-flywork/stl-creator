@@ -22,7 +22,12 @@ describe('indexUrl', () => {
 
 describe('CREATORS', () => {
   it('each live under their own path on the site', () => {
-    expect(CREATORS.map((c) => c.path).sort()).toEqual(['/keycaps/', '/keychain/', '/vase/'])
+    expect(CREATORS.map((c) => c.path).sort()).toEqual([
+      '/keycaps/',
+      '/keychain/',
+      '/onigiri/',
+      '/vase/',
+    ])
   })
 })
 

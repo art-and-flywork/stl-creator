@@ -196,9 +196,10 @@ export default function App() {
       <aside className="panel">
         <header className="panel-head">
           <MoreCreators />
-          <h1>Keycap STL</h1>
+          <h1>Sofle keycaps</h1>
           <p>
-            Shape a DCS-style keycap, check it in 3D, download the STL.{' '}
+            DCS-style keycaps for a Sofle keyboard — one key or the full set, with your own legends. Download the
+            STL.{' '}
             <button type="button" className="link about" onClick={() => setInfoOpen(true)}>
               Print tips, FAQ &amp; license
             </button>
